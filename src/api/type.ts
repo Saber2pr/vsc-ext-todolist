@@ -1,0 +1,23 @@
+import { AxiosRequestConfig } from 'axios'
+
+import { Pair } from '@saber2pr/vscode-webview'
+
+// service type define
+export type Services = {
+  Proxy: Pair<AxiosRequestConfig, any>
+  Store: Pair<
+    {
+      key: string
+      value: string
+    },
+    string
+  >
+  GetStore: Pair<string, any>
+}
+
+export type ITodoItem = {
+  id: number
+  content: string
+  done: boolean
+  level: 'secondary' | 'default' | 'success' | 'warning' | 'danger'
+}

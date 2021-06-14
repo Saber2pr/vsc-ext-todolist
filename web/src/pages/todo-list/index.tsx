@@ -17,6 +17,7 @@ import UndoOutlined from '@ant-design/icons/UndoOutlined'
 import { calcProgress } from '../../../../src/api/calc-progress'
 import { TodoItem } from '../../components'
 import { useTodoList } from '../../hooks'
+import { i18n } from '../../i18n'
 import { getArray, IdList } from '../../utils'
 
 const { Title } = Typography
@@ -51,22 +52,25 @@ export const PageTodoList = () => {
                   updateList()
                 }}
               >
-                新建待办
+                {i18n.format('newItem')}
               </Button>
-              <Button type="text" onClick={() => message.success('保存成功')}>
-                保存内容
+              <Button
+                type="text"
+                onClick={() => message.success(i18n.format('saveTip'))}
+              >
+                {i18n.format('save')}
               </Button>
               <Popconfirm
                 placement="top"
-                title="确定清除已完成项？"
+                title={i18n.format('clearDoneTip')}
                 onConfirm={() => {
                   todo.clear(item => item.done)
                   updateList()
                 }}
-                okText="是"
-                cancelText="否"
+                okText={i18n.format('confirm')}
+                cancelText={i18n.format('cancel')}
               >
-                <Button type="text">清除已完成项</Button>
+                <Button type="text">{i18n.format('clearDone')}</Button>
               </Popconfirm>
             </Space>
           }
@@ -115,13 +119,13 @@ export const PageTodoList = () => {
                       />,
                       <Popconfirm
                         placement="topLeft"
-                        title="确定删除此待办事项？"
+                        title={i18n.format('removeItemTip')}
                         onConfirm={() => {
                           todo.delete(item.id)
                           updateList()
                         }}
-                        okText="是"
-                        cancelText="否"
+                        okText={i18n.format('confirm')}
+                        cancelText={i18n.format('cancel')}
                       >
                         <Button
                           size="small"

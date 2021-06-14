@@ -13,6 +13,7 @@ export type Services = {
     string
   >
   GetStore: Pair<string, any>
+  GetLanguage: Pair<any, any>
 }
 
 export type ITodoItem = {

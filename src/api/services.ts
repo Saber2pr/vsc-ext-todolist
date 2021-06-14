@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as vscode from 'vscode'
 
 import { createServiceHandler } from '@saber2pr/vscode-webview'
 
@@ -14,6 +15,7 @@ const handleServiceMessage = createServiceHandler<Services>({
     configStore.set(key, value)
     return configStore.path
   },
+  GetLanguage: () => vscode.env.language,
 })
 
 export { request, handleServiceMessage }

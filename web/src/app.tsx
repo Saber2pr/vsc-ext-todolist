@@ -1,16 +1,25 @@
 import './app.less'
 
-import React from 'react'
-import { MemoryRouter, Route } from 'react-router'
+import React, { useEffect } from 'react'
+import { Route, useHistory } from 'react-router'
 
+import { callService } from '@saber2pr/vscode-webview'
+
+import { Services } from '../../src/api/type'
+import { i18n } from './i18n'
 import { PageTodoList } from './pages'
 
 export const App = () => {
+  const history = useHistory()
+  useEffect(() => {
+    callService<Services, 'GetLanguage'>('GetLanguage', null).then(language => {
+      i18n.setLocal(language)
+      history.push('/todo')
+    })
+  }, [history])
   return (
     <div className="app">
-      <MemoryRouter>
-        <Route exact path="/" component={() => <PageTodoList />} />
-      </MemoryRouter>
+      <Route path="/todo" component={() => <PageTodoList />} />
     </div>
   )
 }

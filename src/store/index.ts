@@ -10,6 +10,9 @@ const file = nconf.file(configPath)
 
 export const configStore = {
   path: configPath,
+  refresh() {
+    file.load()
+  },
   save() {
     file.save((err: any) => console.log(err))
   },
@@ -18,6 +21,7 @@ export const configStore = {
     configStore.save()
   },
   get(key?: string) {
+    configStore.refresh()
     return file.get(key)
   },
   del(key: string) {

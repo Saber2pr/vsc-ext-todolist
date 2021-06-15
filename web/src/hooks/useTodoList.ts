@@ -9,15 +9,18 @@ import { getArray } from '../utils/getArray'
 
 export const useTodoList = (): [
   ITodoItem[],
-  () => Promise<void>,
+  (refresh?: boolean) => Promise<void>,
   IdList<ITodoItem>
 ] => {
   const ref = useRef<IdList<ITodoItem>>()
   const [todos, setTodos] = useState<ITodoItem[]>()
 
-  const updateTodo = async () => {
+  const updateTodo = async (refresh = false) => {
     const todo = ref.current
-    if (todo) {
+    if (refresh) {
+      await callService<Services, 'RefreshStore'>('RefreshStore', null)
+    }
+    if (todo && !refresh) {
       await callService<Services, 'Store'>('Store', {
         key: KEY_TODO,
         value: todo.toString(),
@@ -29,8 +32,8 @@ export const useTodoList = (): [
     return ref.current
   }
 
-  const updateList = async () => {
-    const todo = await updateTodo()
+  const updateList = async (refresh = false) => {
+    const todo = await updateTodo(refresh)
     setTodos([...getArray(todo?.list)])
   }
 

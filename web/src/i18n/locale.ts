@@ -8,6 +8,8 @@ export const localeMap = {
     saveTip: 'Save success',
     clearDone: 'Clear completed',
     clearDoneTip: 'Are you sure to clear completed items?',
+    update: 'Update List',
+    updateTip: 'The update is successful',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -18,5 +20,7 @@ export const localeMap = {
     saveTip: '保存成功',
     clearDone: '清除已完成项',
     clearDoneTip: '确定清除已完成项？',
+    update: '更新列表',
+    updateTip: '更新成功',
   },
 }

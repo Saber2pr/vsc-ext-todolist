@@ -13,6 +13,7 @@ export type Services = {
     string
   >
   GetStore: Pair<string, any>
+  RefreshStore: Pair<any, any>
   GetLanguage: Pair<any, any>
 }
 

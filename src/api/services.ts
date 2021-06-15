@@ -15,6 +15,7 @@ const handleServiceMessage = createServiceHandler<Services>({
     configStore.set(key, value)
     return configStore.path
   },
+  RefreshStore: () => configStore.refresh(),
   GetLanguage: () => vscode.env.language,
 })
 

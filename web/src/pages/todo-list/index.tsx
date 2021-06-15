@@ -72,6 +72,16 @@ export const PageTodoList = () => {
               >
                 <Button type="text">{i18n.format('clearDone')}</Button>
               </Popconfirm>
+              <Button
+                type="text"
+                onClick={() => {
+                  updateList(true).then(() =>
+                    message.success(i18n.format('updateTip'))
+                  )
+                }}
+              >
+                {i18n.format('update')}
+              </Button>
             </Space>
           }
           bordered

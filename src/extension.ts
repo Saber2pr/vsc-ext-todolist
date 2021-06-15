@@ -38,6 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // webview init
   function activeProjectCreatorWebview() {
+    configStore.refresh()
     if (webviewPanel) {
       webviewPanel.reveal()
     } else {

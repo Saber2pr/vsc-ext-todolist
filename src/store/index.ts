@@ -21,7 +21,6 @@ export const configStore = {
     configStore.save()
   },
   get(key?: string) {
-    configStore.refresh()
     return file.get(key)
   },
   del(key: string) {

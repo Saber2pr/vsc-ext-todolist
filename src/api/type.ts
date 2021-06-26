@@ -22,4 +22,18 @@ export type ITodoItem = {
   content: string
   done: boolean
   level: 'secondary' | 'default' | 'success' | 'warning' | 'danger'
+  pendingDelete?: boolean
+}
+
+export type ITodoTree = {
+  key: string | number,
+  children: ITodoTree[],
+  todo: ITodoItem
+}
+
+export type Key = string | number
+
+export type IStoreTodoTree = {
+  tree: ITodoTree[]
+  expandKeys: Key[]
 }

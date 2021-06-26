@@ -1,7 +1,7 @@
 import { join } from 'path'
 import * as vscode from 'vscode'
 
-const debug = false
+const debug = true
 const sourceTarget = 'http://localhost:8080/'
 
 export const createWebviewContent = ({

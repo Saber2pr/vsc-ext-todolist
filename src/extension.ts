@@ -1,10 +1,10 @@
 import { join } from 'path'
 import * as vscode from 'vscode'
 
-import { calcProgress } from './api/calc-progress'
+import { calcProgressV2 } from './api/calc-progress'
 import { handleServiceMessage } from './api/services'
-import { ITodoItem } from './api/type'
-import { COM_MAIN, KEY_TODO } from './constants'
+import { IStoreTodoTree } from './api/type'
+import { COM_MAIN, KEY_TODO_TREE } from './constants'
 import { configStore } from './store/index'
 import { createWebviewContent } from './webview/createWebviewContent'
 
@@ -14,12 +14,21 @@ let statusBar: vscode.StatusBarItem = null
 const displayName = 'Todo List'
 const loginWelcome = 'Check Todo List.'
 
-const updateStatusBarProgress = () => {
-  const listStr = configStore.get(KEY_TODO)
+// const updateStatusBarProgress = () => {
+//   const listStr = configStore.get(KEY_TODO)
+//   if (listStr) {
+//     const list: ITodoItem[] = JSON.parse(listStr)
+//     const percent = calcProgress(list)
+//     statusBar.text = list.length ? `Todo (${percent}%)` : displayName
+//   }
+// }
+const updateStatusBarProgressV2 = () => {
+  const listStr = configStore.get(KEY_TODO_TREE)
   if (listStr) {
-    const list: ITodoItem[] = JSON.parse(listStr)
-    const percent = calcProgress(list)
-    statusBar.text = list.length ? `Todo (${percent}%)` : displayName
+    const list: IStoreTodoTree = JSON.parse(listStr)
+    const length = list.tree.length
+    const percent = calcProgressV2(list.tree)
+    statusBar.text = length ? `Todo (${percent}%)` : displayName
   }
 }
 
@@ -34,7 +43,8 @@ export function activate(context: vscode.ExtensionContext) {
   statusBar.tooltip = loginWelcome
   statusBar.command = COM_MAIN
   statusBar.show()
-  updateStatusBarProgress()
+  // updateStatusBarProgress()
+  updateStatusBarProgressV2()
 
   // webview init
   function activeProjectCreatorWebview() {
@@ -63,7 +73,8 @@ export function activate(context: vscode.ExtensionContext) {
       webviewPanel.webview.onDidReceiveMessage(
         message => {
           handleServiceMessage(webviewPanel, message)
-          updateStatusBarProgress()
+          // updateStatusBarProgress()
+          updateStatusBarProgressV2()
         },
         null,
         context.subscriptions

@@ -274,6 +274,7 @@ export const PageTodoTree = () => {
           <Button
             type="text"
             onClick={async () => {
+              await callService<Services, 'RefreshStore'>('RefreshStore', null)
               await loadSource()
               message.success(i18n.format('updateTip'))
             }}

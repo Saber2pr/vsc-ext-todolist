@@ -9,7 +9,7 @@ import Select from 'antd/lib/select'
 import Space from 'antd/lib/space'
 import Tree from 'antd/lib/tree'
 import Typography from 'antd/lib/typography'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import CheckOutlined from '@ant-design/icons/CheckOutlined'
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined'
@@ -17,6 +17,7 @@ import PlusOutlined from '@ant-design/icons/PlusOutlined'
 import UndoOutlined from '@ant-design/icons/UndoOutlined'
 import { callService } from '@saber2pr/vscode-webview'
 
+import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
@@ -210,12 +211,17 @@ export const PageTodoTree = () => {
     save()
   }, [treeRef.current])
 
+  const percent = useMemo(
+    () => calcProgressV2(treeRef.current),
+    [treeRef.current]
+  )
+
   return (
     <div className="PageTodoList">
       <div className="layout">
         <Space direction="vertical" style={{ width: '100%' }}>
           <Title>Todo List</Title>
-          <Progress percent={12} />
+          <Progress percent={percent} />
         </Space>
         <Divider />
         <Tree

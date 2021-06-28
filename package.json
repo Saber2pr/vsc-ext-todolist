@@ -3,7 +3,7 @@
 	"displayName": "Todo List",
 	"description": "Check Todo List.",
 	"publisher": "saber2pr",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"engines": {
 		"vscode": "^1.56.0"
 	},

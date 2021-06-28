@@ -55,7 +55,7 @@ export const PageTodoTree = () => {
   const loadSource = async () => {
     callService<Services, 'GetStore'>('GetStore', KEY_TODO_TREE).then(todo => {
       if (todo) {
-        const val: IStoreTodoTree = JSON.parse(todo)
+        const val: IStoreTodoTree = todo
         treeRef.current = getArray(val.tree)
         expandKeysRef.current = getArray(val.expandKeys)
         forceUpdate()
@@ -203,7 +203,7 @@ export const PageTodoTree = () => {
     }
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
-      value: JSON.stringify(storeVal),
+      value: JSON.parse(JSON.stringify(storeVal)),
     })
   }
 

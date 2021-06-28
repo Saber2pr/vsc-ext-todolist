@@ -8,7 +8,7 @@ export type Services = {
   Store: Pair<
     {
       key: string
-      value: string
+      value: any
     },
     string
   >

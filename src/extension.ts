@@ -25,7 +25,7 @@ const loginWelcome = 'Check Todo List.'
 const updateStatusBarProgressV2 = () => {
   const listStr = configStore.get(KEY_TODO_TREE)
   if (listStr) {
-    const list: IStoreTodoTree = JSON.parse(listStr)
+    const list: IStoreTodoTree = listStr
     const length = list.tree.length
     const percent = calcProgressV2(list.tree)
     statusBar.text = length ? `Todo (${percent}%)` : displayName

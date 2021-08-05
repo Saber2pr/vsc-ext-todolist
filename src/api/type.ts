@@ -1,10 +1,7 @@
-import { AxiosRequestConfig } from 'axios'
-
 import { Pair } from '@saber2pr/vscode-webview'
 
 // service type define
 export type Services = {
-  Proxy: Pair<AxiosRequestConfig, any>
   Store: Pair<
     {
       key: string
@@ -26,8 +23,8 @@ export type ITodoItem = {
 }
 
 export type ITodoTree = {
-  key: string | number,
-  children: ITodoTree[],
+  key: string | number
+  children: ITodoTree[]
   todo: ITodoItem
 }
 

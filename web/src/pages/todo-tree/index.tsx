@@ -10,6 +10,7 @@ import Space from 'antd/lib/space'
 import Tree from 'antd/lib/tree'
 import Typography from 'antd/lib/typography'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router'
 
 import CheckOutlined from '@ant-design/icons/CheckOutlined'
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined'
@@ -22,6 +23,7 @@ import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
 import { appendNode, clearDoneNode, getArray, TreeNode } from '../../utils'
+import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
 
 const { Text, Title } = Typography
@@ -52,8 +54,11 @@ export const PageTodoTree = () => {
     events.forEach(l => l())
   }
 
+  const location = useLocation()
+  const params = location?.search ? parseUrlParam(location.search) : {}
+
   const loadSource = async () => {
-    callService<Services, 'GetStore'>('GetStore', KEY_TODO_TREE).then(todo => {
+    callService<Services, 'GetStore'>('GetStore', { key: KEY_TODO_TREE, path: params?.file }).then(todo => {
       if (todo) {
         const val: IStoreTodoTree = todo
         treeRef.current = getArray(val.tree)
@@ -160,12 +165,12 @@ export const PageTodoTree = () => {
             todo.done
               ? false
               : {
-                  tooltip: false,
-                  onChange: value => {
-                    todo.content = value
-                    updateTree()
-                  },
-                }
+                tooltip: false,
+                onChange: value => {
+                  todo.content = value
+                  updateTree()
+                },
+              }
           }
         >
           {todo.content}
@@ -204,11 +209,17 @@ export const PageTodoTree = () => {
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
       value: JSON.parse(JSON.stringify(storeVal)),
+      path: params?.file
     })
   }
 
+  const isMounted = useRef(false)
   useEffect(() => {
-    save()
+    if (isMounted.current) {
+      save()
+    } else {
+      isMounted.current = true
+    }
   }, [treeRef.current])
 
   const percent = useMemo(
@@ -220,7 +231,7 @@ export const PageTodoTree = () => {
     <div className="PageTodoList">
       <div className="layout">
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title>Todo List</Title>
+          <Title>{params?.name ?? 'Todo List'}</Title>
           <Progress percent={percent} />
         </Space>
         <Divider />
@@ -274,7 +285,6 @@ export const PageTodoTree = () => {
           <Button
             type="text"
             onClick={async () => {
-              await callService<Services, 'RefreshStore'>('RefreshStore', null)
               await loadSource()
               message.success(i18n.format('updateTip'))
             }}

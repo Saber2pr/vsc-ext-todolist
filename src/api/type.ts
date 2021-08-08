@@ -6,11 +6,11 @@ export type Services = {
     {
       key: string
       value: any
+      path?: string
     },
     string
   >
-  GetStore: Pair<string, any>
-  RefreshStore: Pair<any, any>
+  GetStore: Pair<{ key: string; path?: string }, any>
   GetLanguage: Pair<any, any>
 }
 

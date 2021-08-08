@@ -4,21 +4,26 @@
 
 TodoList TreeView GUI. Check your todo list with a `TreeView GUI` !
 
-Show todo `progress` in a Status Bar:
+Show Todo `Progress%` in a StatusBar:
 
 ![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist-bar.png)
 
+Click the StatusBar or By Command Palette `todolist.main`:
+
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist.gif)
+
 ## Usage
 
-two ways:
+default todo (~/.todolistrc):
 
 - Click the `Todo StatusBar` at bottom left.
 - `Ctrl+Shift+P` or `Command+Shift+P`, Execute command `todolist.main`
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist.gif)
+extra todo file support:
+
+- Edit `*.todo`, `.todolistrc` files in the Todo editor!
 
 ## More
 
-1. todolist data is autosave as a file, path: [~/.todolistrc](~/.todolistrc)
-2. opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
-3. web app: [TodoList](https://fronted-tsx-developer.github.io/demos/todotree/index.html)
+1. opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
+2. web app support: [TodoList on Web](https://fronted-tsx-developer.github.io/demos/todotree/index.html)

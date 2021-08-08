@@ -2,11 +2,15 @@ import { join } from 'path'
 import * as vscode from 'vscode'
 
 import { calcProgressV2 } from './api/calc-progress'
-import { handleServiceMessage } from './api/services'
+import { FILE_CONFIG_PATH, handleServiceMessage } from './api/services'
 import { IStoreTodoTree } from './api/type'
 import { COM_MAIN, KEY_TODO_TREE } from './constants'
-import { configStore } from './store/index'
-import { createWebviewContent } from './webview/createWebviewContent'
+import { RCManager } from './store/rc'
+import { TodoEditor } from './TodoEditor'
+import {
+  createWebviewContent,
+  WebviewParams,
+} from './webview/createWebviewContent'
 
 let webviewPanel: vscode.WebviewPanel
 let statusBar: vscode.StatusBarItem = null
@@ -14,16 +18,8 @@ let statusBar: vscode.StatusBarItem = null
 const displayName = 'Todo List'
 const loginWelcome = 'Check Todo List.'
 
-// const updateStatusBarProgress = () => {
-//   const listStr = configStore.get(KEY_TODO)
-//   if (listStr) {
-//     const list: ITodoItem[] = JSON.parse(listStr)
-//     const percent = calcProgress(list)
-//     statusBar.text = list.length ? `Todo (${percent}%)` : displayName
-//   }
-// }
-const updateStatusBarProgressV2 = () => {
-  const listStr = configStore.get(KEY_TODO_TREE)
+const updateStatusBarProgressV2 = async () => {
+  const listStr = await new RCManager(FILE_CONFIG_PATH).get(KEY_TODO_TREE)
   if (listStr) {
     const list: IStoreTodoTree = listStr
     const length = list.tree.length
@@ -43,12 +39,10 @@ export function activate(context: vscode.ExtensionContext) {
   statusBar.tooltip = loginWelcome
   statusBar.command = COM_MAIN
   statusBar.show()
-  // updateStatusBarProgress()
   updateStatusBarProgressV2()
 
   // webview init
-  function activeProjectCreatorWebview() {
-    configStore.refresh()
+  function activeProjectCreatorWebview(params: WebviewParams = {}) {
     if (webviewPanel) {
       webviewPanel.reveal()
     } else {
@@ -68,13 +62,13 @@ export function activate(context: vscode.ExtensionContext) {
       webviewPanel.webview.html = createWebviewContent({
         webviewPanel,
         basePath: context.extensionPath,
+        params,
       })
 
       webviewPanel.webview.onDidReceiveMessage(
-        message => {
-          handleServiceMessage(webviewPanel, message)
-          // updateStatusBarProgress()
-          updateStatusBarProgressV2()
+        async message => {
+          await handleServiceMessage(webviewPanel, message)
+          await updateStatusBarProgressV2()
         },
         null,
         context.subscriptions
@@ -89,12 +83,15 @@ export function activate(context: vscode.ExtensionContext) {
       )
     }
   }
-
   // subscriptions
   context.subscriptions.push(
     vscode.commands.registerCommand(COM_MAIN, () => {
       activeProjectCreatorWebview()
-    })
+    }),
+    vscode.window.registerCustomEditorProvider(
+      'todolist.edit',
+      new TodoEditor(context)
+    )
   )
   context.subscriptions.push(statusBar)
 }

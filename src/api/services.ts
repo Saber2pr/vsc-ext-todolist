@@ -1,17 +1,25 @@
+import { homedir } from 'os'
+import { join } from 'path'
 import * as vscode from 'vscode'
 
 import { createServiceHandler } from '@saber2pr/vscode-webview'
 
-import { configStore } from '../store/index'
+import { FILE_CONFIG } from '../constants'
+import { RCManager } from '../store/rc'
 import { Services } from './type'
 
+export const FILE_CONFIG_PATH = join(homedir(), FILE_CONFIG)
+
 const handleServiceMessage = createServiceHandler<Services>({
-  GetStore: configStore.get,
-  Store: ({ key, value }) => {
-    configStore.set(key, value)
-    return configStore.path
+  GetStore: ({ key, path = FILE_CONFIG_PATH }) => {
+    const rc = new RCManager(path)
+    return rc.get(key)
   },
-  RefreshStore: () => configStore.refresh(),
+  Store: async ({ key, value, path = FILE_CONFIG_PATH }) => {
+    const rc = new RCManager(path)
+    await rc.set(key, value)
+    return path
+  },
   GetLanguage: () => vscode.env.language,
 })
 

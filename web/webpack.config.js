@@ -1,9 +1,9 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CleanCSSPlugin = require("less-plugin-clean-css");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require("path");
 
-const extractLess = new ExtractTextPlugin("style.min.css");
+const publicPath = (resourcePath, context) =>
+  path.relative(path.dirname(resourcePath), context) + '/'
 
 module.exports = ({
   entry: "./src/index.tsx",
@@ -18,44 +18,50 @@ module.exports = ({
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        use: ["ts-loader"]
+        use: ['ts-loader'],
       },
       {
-        test: /\.(css|less)$/,
-        use: extractLess.extract({
-          use: [
-            {
-              loader: "css-loader"
-            },
-            {
-              loader: "less-loader",
-              options: {
-                modifyVars: {
-                  'primary-color': '#ff4800',
-                },
-                javascriptEnabled: true,
-                plugins: [
-                  new CleanCSSPlugin({
-                    advanced: true
-                  })
-                ]
-              }
+        test: /\.(woff|svg|eot|ttf|png)$/,
+        use: ['url-loader'],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath },
+          },
+          'css-loader',
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { publicPath },
+          },
+          'css-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+              modifyVars: {
+                'primary-color': '#ff4800',
+              },
             }
-          ],
-          fallback: "style-loader"
-        })
+          },
+        ],
       },
-      {
-        test: /\.(woff|svg|eot|ttf)$/,
-        use: ["url-loader"]
-      }
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'index.html')
     }),
-    extractLess
+    new MiniCssExtractPlugin({
+      filename: 'style.min.css',
+    }),
   ],
   watchOptions: {
     aggregateTimeout: 1000,

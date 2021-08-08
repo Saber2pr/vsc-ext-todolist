@@ -10,7 +10,11 @@ Show Todo `Progress%` in a StatusBar:
 
 Click the StatusBar or By Command Palette `todolist.main`:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist.gif)
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todo-main.gif)
+
+Support `*.todo` files Edit!:
+
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todo-view.gif)
 
 ## Usage
 

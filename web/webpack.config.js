@@ -49,9 +49,6 @@ module.exports = {
             loader: 'less-loader',
             options: {
               javascriptEnabled: true,
-              modifyVars: {
-                'primary-color': '#ff4800',
-              },
             },
           },
         ],

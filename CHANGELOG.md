@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.5...v0.1.6) (2021-08-15)
+
+
+### Features
+
+* theme color support ([679e5ea](https://github.com/Saber2pr/vsc-ext-todolist/commit/679e5ea3c25774e85da14dddb3327c85a4619f6b))
+
+
+### Bug Fixes
+
+* active theme ([2ad4565](https://github.com/Saber2pr/vsc-ext-todolist/commit/2ad456511012e6ff63365da3d41c93292803e6bb))
+
 ### 0.1.5 (2021-08-08)
 
 

@@ -8,13 +8,23 @@ Show Todo `Progress%` in a StatusBar:
 
 ![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist-bar.png)
 
+## Overview
+
 Click the StatusBar or By Command Palette `todolist.main`:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todo-main.gif)
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3.gif)
+
+---
 
 Support `*.todo` files Edit!:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todo-view.gif)
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3-view.gif)
+
+---
+
+Support `Color Theme` with current setting:
+
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3-theme.gif)
 
 ## Usage
 
@@ -29,5 +39,5 @@ extra todo file support:
 
 ## More
 
-1. opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
-2. web app support: [TodoList on Web](https://fronted-tsx-developer.github.io/demos/todotree/index.html)
+1. Feedback and opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
+2. Web app support: [TodoList on Web](https://fronted-tsx-developer.github.io/demos/todotree/index.html)

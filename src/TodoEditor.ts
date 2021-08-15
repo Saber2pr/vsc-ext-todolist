@@ -17,7 +17,10 @@ import {
 
 import { handleServiceMessage } from './api/services'
 import { isActiveThemeKind } from './utils/isActiveThemeKind'
-import { createWebviewContent } from './webview/createWebviewContent'
+import {
+  createWebviewContent,
+  WebviewParams,
+} from './webview/createWebviewContent'
 
 export class TodoEditor implements CustomEditorProvider<TodoDocument> {
   private readonly onDidChangeCustomDocumentEmitter = new EventEmitter<
@@ -74,14 +77,17 @@ export class TodoEditor implements CustomEditorProvider<TodoDocument> {
       webview.options = {
         enableScripts: true,
       }
-      webviewPanel.webview.html = createWebviewContent({
-        webviewPanel,
-        basePath: this.context.extensionPath,
-        params: {
-          file: document.uri.fsPath,
-          name: parse(document.uri.fsPath).name,
-          theme: isActiveThemeKind(ColorThemeKind.Light) ? 'light' : 'dark',
-        },
+      const loadContent = (params: WebviewParams) => {
+        webviewPanel.webview.html = createWebviewContent({
+          webviewPanel,
+          basePath: this.context.extensionPath,
+          params,
+        })
+      }
+      loadContent({
+        file: document.uri.fsPath,
+        name: parse(document.uri.fsPath).name,
+        theme: isActiveThemeKind(ColorThemeKind.Light) ? 'light' : 'dark',
       })
       webviewPanel.iconPath = Uri.file(
         join(this.context.extensionPath, 'assets', 'logo.png')
@@ -92,6 +98,16 @@ export class TodoEditor implements CustomEditorProvider<TodoDocument> {
         },
         null,
         this.context.subscriptions
+      )
+      this.context.subscriptions.push(
+        window.onDidChangeActiveColorTheme(event => {
+          webviewPanel?.visible &&
+            loadContent({
+              file: document.uri.fsPath,
+              name: parse(document.uri.fsPath).name,
+              theme: event.kind === ColorThemeKind.Light ? 'light' : 'dark',
+            })
+        })
       )
     } catch (e) {
       window.showErrorMessage(`Failed to open file: ${e}`)

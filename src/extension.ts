@@ -63,7 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.ViewColumn.One,
         {
           enableScripts: true,
-          retainContextWhenHidden: true,
+          retainContextWhenHidden: false,
         }
       )
       webviewPanel.iconPath = vscode.Uri.file(
@@ -108,12 +108,14 @@ export function activate(context: vscode.ExtensionContext) {
       new TodoEditor(context)
     ),
     vscode.window.onDidChangeActiveColorTheme(event => {
-      activeProjectCreatorWebview(
-        {
-          theme: event.kind === vscode.ColorThemeKind.Light ? 'light' : 'dark',
-        },
-        true
-      )
+      webviewPanel?.visible &&
+        activeProjectCreatorWebview(
+          {
+            theme:
+              event.kind === vscode.ColorThemeKind.Light ? 'light' : 'dark',
+          },
+          true
+        )
     })
   )
   context.subscriptions.push(statusBar)

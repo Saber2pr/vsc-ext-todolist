@@ -1,6 +1,7 @@
 import { join, parse } from 'path'
 import {
   CancellationToken,
+  ColorThemeKind,
   CustomDocument,
   CustomDocumentBackup,
   CustomDocumentBackupContext,
@@ -15,6 +16,7 @@ import {
 } from 'vscode'
 
 import { handleServiceMessage } from './api/services'
+import { isActiveThemeKind } from './utils/isActiveThemeKind'
 import { createWebviewContent } from './webview/createWebviewContent'
 
 export class TodoEditor implements CustomEditorProvider<TodoDocument> {
@@ -78,6 +80,7 @@ export class TodoEditor implements CustomEditorProvider<TodoDocument> {
         params: {
           file: document.uri.fsPath,
           name: parse(document.uri.fsPath).name,
+          theme: isActiveThemeKind(ColorThemeKind.Light) ? 'light' : 'dark',
         },
       })
       webviewPanel.iconPath = Uri.file(
@@ -107,11 +110,11 @@ class TodoDocument implements CustomDocument {
   public async saveAs(target: Uri): Promise<void> {}
 
   public async loadFromDisk(): Promise<void> {
-    if (this.uri.fsPath.endsWith('.todo')) {
-      const buffer = await workspace.fs.readFile(this.uri)
-    } else {
-      throw new Error('Invalid file extension')
-    }
+    // if (this.uri.fsPath.endsWith('.todo')) {
+    //   const buffer = await workspace.fs.readFile(this.uri)
+    // } else {
+    //   throw new Error('Invalid file extension')
+    // }
   }
 
   public async backup(destination: Uri): Promise<CustomDocumentBackup> {

@@ -58,7 +58,10 @@ export const PageTodoTree = () => {
   const params = location?.search ? parseUrlParam(location.search) : {}
 
   const loadSource = async () => {
-    callService<Services, 'GetStore'>('GetStore', { key: KEY_TODO_TREE, path: params?.file }).then(todo => {
+    callService<Services, 'GetStore'>('GetStore', {
+      key: KEY_TODO_TREE,
+      path: params?.file,
+    }).then(todo => {
       if (todo) {
         const val: IStoreTodoTree = todo
         treeRef.current = getArray(val.tree)
@@ -165,12 +168,12 @@ export const PageTodoTree = () => {
             todo.done
               ? false
               : {
-                tooltip: false,
-                onChange: value => {
-                  todo.content = value
-                  updateTree()
-                },
-              }
+                  tooltip: false,
+                  onChange: value => {
+                    todo.content = value
+                    updateTree()
+                  },
+                }
           }
         >
           {todo.content}
@@ -209,7 +212,7 @@ export const PageTodoTree = () => {
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
       value: JSON.parse(JSON.stringify(storeVal)),
-      path: params?.file
+      path: params?.file,
     })
   }
 

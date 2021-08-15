@@ -1,12 +1,10 @@
 import { join } from 'path'
 import * as vscode from 'vscode'
 
-const debug = false
-const sourceTarget = 'http://localhost:8080/'
-
 export type WebviewParams = {
   file?: string
   name?: string
+  theme?: 'light' | 'dark'
 }
 
 export const createWebviewContent = ({
@@ -18,12 +16,10 @@ export const createWebviewContent = ({
   basePath: string
   params?: WebviewParams
 }) => {
-  const getSource = (name: string) => {
-    if (debug) {
-      return join(sourceTarget, name)
-    }
+  const theme = params?.theme ?? 'light'
+  const getSource = (...names: string[]) => {
     return webviewPanel.webview.asWebviewUri(
-      vscode.Uri.file(join(basePath, 'web', 'build', name))
+      vscode.Uri.file(join(basePath, 'web', ...names))
     )
   }
   return `
@@ -34,7 +30,13 @@ export const createWebviewContent = ({
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="${getSource('style.min.css')}" rel="stylesheet">
+    <link href="${getSource('build', `app.min.css`)}" rel="stylesheet">
+    <link href="${getSource(
+      'node_modules',
+      `antd`,
+      'dist',
+      theme === 'light' ? 'antd.min.css' : 'antd.dark.min.css'
+    )}" rel="stylesheet">
     <script>
       var __ARGS__ = ${JSON.stringify(params)}
     </script>
@@ -42,7 +44,8 @@ export const createWebviewContent = ({
   <body>
     <div id="root"></div>
   <script type="text/javascript" src="${getSource(
-    'bundle.min.js'
+    'build',
+    `app.min.js`
   )}"></script></body>
   </html>
   `

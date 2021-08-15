@@ -7,6 +7,7 @@ import { IStoreTodoTree } from './api/type'
 import { COM_MAIN, KEY_TODO_TREE } from './constants'
 import { RCManager } from './store/rc'
 import { TodoEditor } from './TodoEditor'
+import { isActiveThemeKind } from './utils/isActiveThemeKind'
 import {
   createWebviewContent,
   WebviewParams,
@@ -42,8 +43,18 @@ export function activate(context: vscode.ExtensionContext) {
   updateStatusBarProgressV2()
 
   // webview init
-  function activeProjectCreatorWebview(params: WebviewParams = {}) {
+  function activeProjectCreatorWebview(
+    params: WebviewParams = {},
+    reload = false
+  ) {
     if (webviewPanel) {
+      if (reload) {
+        webviewPanel.webview.html = createWebviewContent({
+          webviewPanel,
+          basePath: context.extensionPath,
+          params,
+        })
+      }
       webviewPanel.reveal()
     } else {
       webviewPanel = vscode.window.createWebviewPanel(
@@ -86,12 +97,24 @@ export function activate(context: vscode.ExtensionContext) {
   // subscriptions
   context.subscriptions.push(
     vscode.commands.registerCommand(COM_MAIN, () => {
-      activeProjectCreatorWebview()
+      activeProjectCreatorWebview({
+        theme: isActiveThemeKind(vscode.ColorThemeKind.Light)
+          ? 'light'
+          : 'dark',
+      })
     }),
     vscode.window.registerCustomEditorProvider(
       'todolist.edit',
       new TodoEditor(context)
-    )
+    ),
+    vscode.window.onDidChangeActiveColorTheme(event => {
+      activeProjectCreatorWebview(
+        {
+          theme: event.kind === vscode.ColorThemeKind.Light ? 'light' : 'dark',
+        },
+        true
+      )
+    })
   )
   context.subscriptions.push(statusBar)
 }

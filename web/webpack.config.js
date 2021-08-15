@@ -1,19 +1,22 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const path = require("path");
+const path = require('path')
 
 const publicPath = (resourcePath, context) =>
   path.relative(path.dirname(resourcePath), context) + '/'
 
-module.exports = ({
-  entry: "./src/index.tsx",
+module.exports = {
+  entry: {
+    app: './src/index.tsx'
+  },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx"]
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   output: {
-    filename: "bundle.min.js",
-    path: path.join(__dirname, "build")
+    filename: '[name].min.js',
+    path: path.join(__dirname, 'build'),
   },
+  devServer: { writeToDisk: true },
   module: {
     rules: [
       {
@@ -49,7 +52,7 @@ module.exports = ({
               modifyVars: {
                 'primary-color': '#ff4800',
               },
-            }
+            },
           },
         ],
       },
@@ -57,14 +60,14 @@ module.exports = ({
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html')
+      template: path.join(__dirname, 'index.html'),
     }),
     new MiniCssExtractPlugin({
-      filename: 'style.min.css',
+      filename: '[name].min.css',
     }),
   ],
   watchOptions: {
     aggregateTimeout: 1000,
-    ignored: /node_modules|lib/
-  }
-});
+    ignored: /node_modules|lib/,
+  },
+}

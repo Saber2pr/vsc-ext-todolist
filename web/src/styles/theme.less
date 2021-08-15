@@ -1,0 +1,31 @@
+
+body {
+  background-color: var(--vscode-editor-background) !important;
+}
+
+.ant-tree {
+  background: inherit !important;
+  .ant-tree-node-content-wrapper {
+    &:hover {
+      background-color: var(--vscode-list-hoverBackground) !important;
+    }
+    &.ant-tree-node-selected {
+      background-color: var(--vscode-list-activeSelectionBackground) !important;
+    }
+  }
+}
+
+.ant-progress-inner {
+  background-color: var(--vscode-list-hoverBackground) !important;
+  .ant-progress-bg {
+    background-color: var(--vscode-list-activeSelectionBackground) !important;
+  }
+}
+
+.ant-select-dropdown {
+  background: var(--vscode-list-dropBackground) !important;
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: var(--vscode-list-activeSelectionBackground) !important;
+    color: var(--vscode-list-activeSelectionForeground) !important;
+  }
+}

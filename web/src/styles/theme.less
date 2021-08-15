@@ -1,4 +1,3 @@
-
 body {
   background-color: var(--vscode-editor-background) !important;
 }
@@ -23,7 +22,10 @@ body {
 }
 
 .ant-select-dropdown {
-  background: var(--vscode-list-dropBackground) !important;
+  background: var(--vscode-editorWidget-background) !important;
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: var(--vscode-list-hoverBackground) !important;
+  }
   .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
     background-color: var(--vscode-list-activeSelectionBackground) !important;
     color: var(--vscode-list-activeSelectionForeground) !important;

@@ -13,10 +13,7 @@ vsc-extension-quickstart.md
 yarn-error.log
 yarn.lock
 
-web/node_modules
-web/src
-web/package.json
-web/yarn.lock
-web/index.html
-web/tsconfig.json
-web/webpack.config.js
+web/
+!web/node_modules/antd/dist/antd.min.css
+!web/node_modules/antd/dist/antd.dark.min.css
+!web/build/*

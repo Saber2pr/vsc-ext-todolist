@@ -6,13 +6,17 @@ labels: ''
 assignees: ''
 ---
 
+## Description
+
+Describe your problem.
+
 ## Platform
 
 Mac or Windows.
 
 ## Version
 
-version of extension, like v1.0.0.
+Version of extension, like v1.0.0.
 
 ## Error Log
 

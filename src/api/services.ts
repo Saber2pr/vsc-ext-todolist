@@ -1,3 +1,4 @@
+import { saveWorkspaceFile } from './../utils/saveWorkspaceFile'
 import { homedir } from 'os'
 import { join } from 'path'
 import * as vscode from 'vscode'
@@ -21,6 +22,7 @@ const handleServiceMessage = createServiceHandler<Services>({
     return path
   },
   GetLanguage: () => vscode.env.language,
+  SaveFile: ({ path, content }) => saveWorkspaceFile(path, content),
 })
 
 export { handleServiceMessage }

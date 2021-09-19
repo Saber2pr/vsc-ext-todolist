@@ -12,6 +12,7 @@ export type Services = {
   >
   GetStore: Pair<{ key: string; path?: string }, any>
   GetLanguage: Pair<any, any>
+  SaveFile: Pair<{ path: string; content: string }, any>
 }
 
 export type ITodoItem = {

@@ -22,9 +22,16 @@ import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
-import { appendNode, clearDoneNode, getArray, TreeNode } from '../../utils'
+import {
+  appendNode,
+  clearDoneNode,
+  getArray,
+  parseMd,
+  TreeNode,
+} from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
+import { MdOptionModal } from '../../components/md-option-modal'
 
 const { Text, Title } = Typography
 
@@ -230,11 +237,16 @@ export const PageTodoTree = () => {
     [treeRef.current]
   )
 
+  const TITLE = params?.name ?? 'Todo List'
+
+  // md modal
+  const [showMdOptionsModal, setShowMdOptionsModal] = useState(false)
+
   return (
     <div className="PageTodoList">
       <div className="layout">
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Title>{params?.name ?? 'Todo List'}</Title>
+          <Title>{TITLE}</Title>
           <Progress percent={percent} />
         </Space>
         <Divider />
@@ -294,7 +306,31 @@ export const PageTodoTree = () => {
           >
             {i18n.format('update')}
           </Button>
+          <Button
+            type="text"
+            onClick={() => {
+              setShowMdOptionsModal(true)
+            }}
+          >
+            {i18n.format('parsemd')}
+          </Button>
         </Space>
+        <MdOptionModal
+          visible={showMdOptionsModal}
+          onCancel={() => setShowMdOptionsModal(false)}
+          onOk={async values => {
+            console.log(values, values.useTab === 'no-tab', treeRef.current)
+            const tree = treeRef.current
+            if (tree) {
+              await callService<Services, 'SaveFile'>('SaveFile', {
+                path: `${TITLE}.md`,
+                content: parseMd(treeRef.current, values.useTab === 'no-tab'),
+              })
+              message.success(i18n.format('createTip'))
+              setShowMdOptionsModal(false)
+            }
+          }}
+        />
       </div>
     </div>
   )

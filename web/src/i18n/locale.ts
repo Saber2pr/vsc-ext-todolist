@@ -10,6 +10,11 @@ export const localeMap = {
     clearDoneTip: 'Are you sure to clear completed items?',
     update: 'Update List',
     updateTip: 'The update is successful',
+    createTip: 'Create success',
+    parsemd: 'Create Md',
+    md_tab: 'Tab Strategy',
+    md_usetab: 'Use Tab',
+    md_notab: 'No Tab',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -22,5 +27,10 @@ export const localeMap = {
     clearDoneTip: '确定清除已完成项？',
     update: '更新列表',
     updateTip: '更新成功',
+    createTip: '生成成功',
+    parsemd: '生成md',
+    md_tab: '缩进策略',
+    md_usetab: '使用缩进',
+    md_notab: '不使用缩进',
   },
 }

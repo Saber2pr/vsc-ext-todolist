@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.6...v0.1.7) (2021-09-19)
+
+
+### Features
+
+* add logo ([605f344](https://github.com/Saber2pr/vsc-ext-todolist/commit/605f344de524856ea6024158c0b66a4d9147a65f))
+* add logo ([47399d0](https://github.com/Saber2pr/vsc-ext-todolist/commit/47399d02a153cdd1527e82672ba29e3d17683719))
+* add pr tpl ([9e73441](https://github.com/Saber2pr/vsc-ext-todolist/commit/9e734410ba05fe616348cc2a84e237a1e8020824))
+* save markdown ([e5d3509](https://github.com/Saber2pr/vsc-ext-todolist/commit/e5d350915942abe947f981d7b684ce6cd76c45df))
+* update tpl ([73bce8d](https://github.com/Saber2pr/vsc-ext-todolist/commit/73bce8d5651ffdcf0b3004387e34489171564a26))
+
 ### [0.1.6](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.5...v0.1.6) (2021-08-15)
 
 

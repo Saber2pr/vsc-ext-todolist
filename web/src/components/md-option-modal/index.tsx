@@ -50,7 +50,7 @@ export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
     >
       <Form
         form={form}
-        labelCol={{ span: 4 }}
+        labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}
         onFinish={values => onOk(values)}
       >

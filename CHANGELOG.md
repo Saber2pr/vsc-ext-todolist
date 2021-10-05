@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.8...v0.1.9) (2021-10-05)
+
+
+### Features
+
+* compile md display done status ([44904ae](https://github.com/Saber2pr/vsc-ext-todolist/commit/44904ae68b310c54217a4f4d43694667d68c1f96))
+
 ### [0.1.8](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.7...v0.1.8) (2021-09-19)
 
 ### [0.1.7](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.6...v0.1.7) (2021-09-19)

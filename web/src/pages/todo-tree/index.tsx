@@ -26,7 +26,7 @@ import {
   appendNode,
   clearDoneNode,
   getArray,
-  parseMd,
+  compileMd,
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
@@ -175,12 +175,12 @@ export const PageTodoTree = () => {
             todo.done
               ? false
               : {
-                  tooltip: false,
-                  onChange: value => {
-                    todo.content = value
-                    updateTree()
-                  },
-                }
+                tooltip: false,
+                onChange: value => {
+                  todo.content = value
+                  updateTree()
+                },
+              }
           }
         >
           {todo.content}
@@ -319,12 +319,14 @@ export const PageTodoTree = () => {
           visible={showMdOptionsModal}
           onCancel={() => setShowMdOptionsModal(false)}
           onOk={async values => {
-            console.log(values, values.useTab === 'no-tab', treeRef.current)
             const tree = treeRef.current
             if (tree) {
               await callService<Services, 'SaveFile'>('SaveFile', {
                 path: `${TITLE}.md`,
-                content: parseMd(treeRef.current, values.useTab === 'no-tab'),
+                content: compileMd(treeRef.current, {
+                  noTab: values.useTab === 'no-tab',
+                  displayDone: values.displayDone
+                }),
               })
               message.success(i18n.format('createTip'))
               setShowMdOptionsModal(false)

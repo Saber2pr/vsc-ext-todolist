@@ -6,6 +6,7 @@ import Select from 'antd/lib/select'
 import React from 'react'
 
 import { i18n } from '../../i18n'
+import { FormCheckbox } from '../form-check-box'
 
 export interface MdOptionModal {
   onOk(values: MdOptions): void
@@ -20,6 +21,7 @@ interface MdUseTabOption {
 
 interface MdOptions {
   useTab: MdUseTabOption['value']
+  displayDone: boolean
 }
 
 export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
@@ -66,6 +68,13 @@ export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
               </Select.Option>
             ))}
           </Select>
+        </Form.Item>
+        <Form.Item
+          label={i18n.format('md_display_done')}
+          name="displayDone"
+          initialValue={false}
+        >
+          <FormCheckbox />
         </Form.Item>
       </Form>
     </Modal>

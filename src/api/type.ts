@@ -34,4 +34,5 @@ export type Key = string | number
 export type IStoreTodoTree = {
   tree: ITodoTree[]
   expandKeys: Key[]
+  schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26'
 }

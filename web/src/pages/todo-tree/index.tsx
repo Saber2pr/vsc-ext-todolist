@@ -215,6 +215,7 @@ export const PageTodoTree = () => {
     const storeVal: IStoreTodoTree = {
       tree: treeRef.current,
       expandKeys: expandKeysRef.current,
+      schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26'
     }
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,

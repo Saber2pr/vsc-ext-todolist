@@ -32,6 +32,7 @@ import {
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
 import { MdOptionModal } from '../../components/md-option-modal'
+import Affix from 'antd/lib/affix'
 
 const { Text, Title } = Typography
 
@@ -175,12 +176,12 @@ export const PageTodoTree = () => {
             todo.done
               ? false
               : {
-                tooltip: false,
-                onChange: value => {
-                  todo.content = value
-                  updateTree()
-                },
-              }
+                  tooltip: false,
+                  onChange: value => {
+                    todo.content = value
+                    updateTree()
+                  },
+                }
           }
         >
           {todo.content}
@@ -215,7 +216,8 @@ export const PageTodoTree = () => {
     const storeVal: IStoreTodoTree = {
       tree: treeRef.current,
       expandKeys: expandKeysRef.current,
-      schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26'
+      schema:
+        'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26',
     }
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
@@ -251,71 +253,77 @@ export const PageTodoTree = () => {
           <Progress percent={percent} />
         </Space>
         <Divider />
-        <Tree
-          titleRender={(node: TreeNode) => <Item node={node} />}
-          expandedKeys={expandKeysRef.current}
-          onExpand={keys => updateExpandKeys(keys, 'replace')}
-          draggable
-          blockNode
-          onDrop={treeDrop(treeRef.current, data => {
-            treeRef.current = data
-            updateTree()
-          })}
-          treeData={treeRef.current}
-        />
-        <Divider />
-        <Space split={<Divider type="vertical" />}>
-          <Button
-            type="text"
-            onClick={() => {
-              createNode(() => treeRef.current)
+        <div className="tree-wrapper">
+          <Tree
+            titleRender={(node: TreeNode) => <Item node={node} />}
+            expandedKeys={expandKeysRef.current}
+            onExpand={keys => updateExpandKeys(keys, 'replace')}
+            draggable
+            blockNode
+            onDrop={treeDrop(treeRef.current, data => {
+              treeRef.current = data
               updateTree()
-            }}
-          >
-            {i18n.format('newItem')}
-          </Button>
-          <Button
-            type="text"
-            onClick={async () => {
-              await save()
-              message.success(i18n.format('saveTip'))
-            }}
-          >
-            {i18n.format('save')}
-          </Button>
-          <Popconfirm
-            placement="top"
-            title={i18n.format('clearDoneTip')}
-            onConfirm={() => {
-              treeRef.current = clearDoneNode(
-                treeRef.current,
-                node => node.todo.done
-              )
-              updateTree()
-            }}
-            okText={i18n.format('confirm')}
-            cancelText={i18n.format('cancel')}
-          >
-            <Button type="text">{i18n.format('clearDone')}</Button>
-          </Popconfirm>
-          <Button
-            type="text"
-            onClick={async () => {
-              await loadSource()
-              message.success(i18n.format('updateTip'))
-            }}
-          >
-            {i18n.format('update')}
-          </Button>
-          <Button
-            type="text"
-            onClick={() => {
-              setShowMdOptionsModal(true)
-            }}
-          >
-            {i18n.format('parsemd')}
-          </Button>
-        </Space>
+            })}
+            treeData={treeRef.current}
+          />
+        </div>
+        <Affix offsetBottom={0}>
+          <div className="tools-wrapper">
+            <Divider className="tools-wrapper-div" style={{ margin: 0 }} />
+            <Space split={<Divider type="vertical" />}>
+              <Button
+                type="text"
+                onClick={() => {
+                  createNode(() => treeRef.current)
+                  updateTree()
+                }}
+              >
+                {i18n.format('newItem')}
+              </Button>
+              <Button
+                type="text"
+                onClick={async () => {
+                  await save()
+                  message.success(i18n.format('saveTip'))
+                }}
+              >
+                {i18n.format('save')}
+              </Button>
+              <Popconfirm
+                placement="top"
+                title={i18n.format('clearDoneTip')}
+                onConfirm={() => {
+                  treeRef.current = clearDoneNode(
+                    treeRef.current,
+                    node => node.todo.done
+                  )
+                  updateTree()
+                }}
+                okText={i18n.format('confirm')}
+                cancelText={i18n.format('cancel')}
+              >
+                <Button type="text">{i18n.format('clearDone')}</Button>
+              </Popconfirm>
+              <Button
+                type="text"
+                onClick={async () => {
+                  await loadSource()
+                  message.success(i18n.format('updateTip'))
+                }}
+              >
+                {i18n.format('update')}
+              </Button>
+              <Button
+                type="text"
+                onClick={() => {
+                  setShowMdOptionsModal(true)
+                }}
+              >
+                {i18n.format('parsemd')}
+              </Button>
+            </Space>
+          </div>
+        </Affix>
         <MdOptionModal
           visible={showMdOptionsModal}
           onCancel={() => setShowMdOptionsModal(false)}
@@ -326,7 +334,7 @@ export const PageTodoTree = () => {
                 path: `${TITLE}.md`,
                 content: compileMd(treeRef.current, {
                   noTab: values.useTab === 'no-tab',
-                  displayDone: values.displayDone
+                  displayDone: values.displayDone,
                 }),
               })
               message.success(i18n.format('createTip'))

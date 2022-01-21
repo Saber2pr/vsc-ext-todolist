@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.9...v0.1.11) (2022-01-21)
+
+
+### Features
+
+* button tools fixed at bottom ([420bb65](https://github.com/Saber2pr/vsc-ext-todolist/commit/420bb6575e97e06814f62ed2355bb89b3bbe70bf))
+* new todo created at top of list ([c86fe7c](https://github.com/Saber2pr/vsc-ext-todolist/commit/c86fe7cdbd1c10b4d9d16c66b92f351534dd80a6))
+* schema ([c4fdc6b](https://github.com/Saber2pr/vsc-ext-todolist/commit/c4fdc6b9ea0d3855c293e88ac67d4bb605224ae3))
+
 ### [0.1.10](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.9...v0.1.10) (2021-10-06)
 
 

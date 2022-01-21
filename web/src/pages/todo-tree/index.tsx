@@ -1,5 +1,6 @@
 import './style.less'
 
+import Affix from 'antd/lib/affix'
 import Button from 'antd/lib/button'
 import Divider from 'antd/lib/divider'
 import message from 'antd/lib/message'
@@ -21,18 +22,17 @@ import { callService } from '@saber2pr/vscode-webview'
 import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
+import { MdOptionModal } from '../../components/md-option-modal'
 import { i18n } from '../../i18n'
 import {
-  appendNode,
   clearDoneNode,
-  getArray,
   compileMd,
+  getArray,
+  insertNode,
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
-import { MdOptionModal } from '../../components/md-option-modal'
-import Affix from 'antd/lib/affix'
 
 const { Text, Title } = Typography
 
@@ -209,7 +209,7 @@ export const PageTodoTree = () => {
         todo: node.todo,
       }),
     }
-    appendNode(getContainer(), node)
+    insertNode(getContainer(), node)
   }
 
   const save = async () => {

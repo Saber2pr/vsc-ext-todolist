@@ -21,6 +21,13 @@ export const appendNode = (container: TreeNode[], node: TreeNode) => {
     container.push(node)
   }
 }
+
+export const insertNode = (container: TreeNode[], node: TreeNode) => {
+  if (Array.isArray(container)) {
+    container.unshift(node)
+  }
+}
+
 export const removeNode = (container: TreeNode[], node: TreeNode) => {
   if (Array.isArray(container)) {
     container.splice(container.indexOf(node), 1)

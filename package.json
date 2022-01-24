@@ -53,7 +53,8 @@
 		"commands": [
 			{
 				"command": "todolist.main",
-				"title": "Todo List"
+				"title": "Todo List",
+				"icon": "assets/logo.png"
 			}
 		]
 	},

@@ -281,7 +281,7 @@ export const PageTodoTree = () => {
         </Space>
         <Divider />
         <div className="tree-wrapper">
-          <Spin spinning={!mounted}>
+          <Spin spinning={!mounted} tip={i18n.format('loading')}>
             {todoTreeLength > 0 ? (
               <Tree
                 titleRender={(node: TreeNode) => <Item node={node} />}
@@ -295,12 +295,10 @@ export const PageTodoTree = () => {
                 })}
                 treeData={treeRef.current}
               />
+            ) : mounted ? (
+              <Empty description={i18n.format('null')} />
             ) : (
-              <Empty
-                description={
-                  mounted ? i18n.format('null') : i18n.format('loading')
-                }
-              />
+              <div style={{ height: 100 }}></div>
             )}
           </Spin>
         </div>

@@ -33,6 +33,7 @@ import {
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
+import { OptionsBtn } from '../../components/options-btn'
 
 const { Text, Title } = Typography
 
@@ -162,6 +163,14 @@ export const PageTodoTree = () => {
           >
             <Button size="small" type="text" icon={<DeleteOutlined />} />
           </Popconfirm>
+          <OptionsBtn
+            onCopy={() => node}
+            onPaste={copyNode => {
+              insertNode(node.children, copyNode)
+              updateTree()
+              updateExpandKeys([copyNode.key], 'push')
+            }}
+          />
         </>
       )
     }

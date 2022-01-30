@@ -13,6 +13,9 @@ export type Services = {
   GetStore: Pair<{ key: string; path?: string }, any>
   GetLanguage: Pair<any, any>
   SaveFile: Pair<{ path: string; content: string }, any>
+  // temp
+  SetTemp: Pair<{ key: string; value: any }, any>
+  GetTemp: Pair<{ key: string }, any>
 }
 
 export type ITodoItem = {

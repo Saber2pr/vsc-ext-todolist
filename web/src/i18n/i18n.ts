@@ -2,24 +2,24 @@ export interface ITextMap {
   [key: string]: string
 }
 
+export type ILocalesTextMap = { [locale: string]: ITextMap }
+
 const template = (tpl: string, values: { [x: string]: any }) =>
   tpl.replace(/{\w+}/g, (slot: string) => values[slot.replace(/{|}/g, '')])
 
-export class I18n {
-  localesTextMap: { [locale: string]: ITextMap } = {}
-  currentTextMap: ITextMap = {}
-  registry(locale: string, text: ITextMap) {
-    this.localesTextMap[locale] = text
-  }
+export class I18n<T extends ILocalesTextMap, M = T[keyof T]> {
+  private currentTextMap: ITextMap = {}
 
-  setLocal(locale: string) {
+  constructor(private localesTextMap: T) {}
+
+  setLocal(locale: keyof T) {
     this.currentTextMap =
       this.localesTextMap[locale] ||
       this.localesTextMap[Object.keys(this.localesTextMap)[0]]
   }
 
-  format(contentKey: string, args?: Record<string, string>) {
-    const i18nformatString = this.currentTextMap[contentKey]
+  format(contentKey: keyof M, args?: Record<string, string>) {
+    const i18nformatString = this.currentTextMap[contentKey as any]
     if (!i18nformatString) {
       return ''
     }

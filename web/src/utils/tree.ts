@@ -33,7 +33,10 @@ export const removeNode = (container: TreeNode[], node: TreeNode) => {
     container.splice(container.indexOf(node), 1)
   }
 }
-export const clearDoneNode = (treeNode: TreeNode[], isRemove: (node: TreeNode) => boolean) => {
+export const clearDoneNode = (
+  treeNode: TreeNode[],
+  isRemove: (node: TreeNode) => boolean
+) => {
   if (!(treeNode?.length > 0)) return []
   const nextTree: TreeNode[] = []
   for (const node of treeNode) {
@@ -44,4 +47,34 @@ export const clearDoneNode = (treeNode: TreeNode[], isRemove: (node: TreeNode) =
     node.children = clearDoneNode(node.children, isRemove)
   }
   return nextTree
+}
+
+export interface TreeLike {
+  children?: any[]
+}
+
+export const mapTree = <N extends TreeLike, T extends TreeLike>(
+  treeNode: N[],
+  mapFunc: (node: N) => T
+) => {
+  if (!(treeNode?.length > 0)) return []
+  const nextTree: T[] = []
+  for (const node of treeNode) {
+    const newNode = mapFunc(node)
+    newNode.children = mapTree(node.children, mapFunc)
+    nextTree.push(newNode)
+  }
+  return nextTree
+}
+
+export const cloneTree = (node: TreeNode) => {
+  let i = 0
+  const start = Date.now()
+  const tree = mapTree([node], n => {
+    const newNode = { ...n }
+    i++
+    newNode.key = start + i
+    return newNode
+  })
+  return tree[0]
 }

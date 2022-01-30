@@ -21,6 +21,9 @@ export const localeMap = {
     md_bracket_right_space: ' ',
     md_bracket_done_ok: 'Done',
     md_bracket_done_no: 'Todo',
+    copy: 'Copy',
+    copy_success: 'Copy success',
+    paste: 'Paste',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -44,5 +47,8 @@ export const localeMap = {
     md_bracket_right_space: '',
     md_bracket_done_ok: '已完成',
     md_bracket_done_no: '未完成',
+    copy: '复制',
+    copy_success: '复制成功',
+    paste: '粘贴',
   },
 }

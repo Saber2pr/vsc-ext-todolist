@@ -3,11 +3,13 @@ import './style.less'
 import Affix from 'antd/lib/affix'
 import Button from 'antd/lib/button'
 import Divider from 'antd/lib/divider'
+import Empty from 'antd/lib/empty'
 import message from 'antd/lib/message'
 import Popconfirm from 'antd/lib/popconfirm'
 import Progress from 'antd/lib/progress'
 import Select from 'antd/lib/select'
 import Space from 'antd/lib/space'
+import Spin from 'antd/lib/spin'
 import Tree from 'antd/lib/tree'
 import Typography from 'antd/lib/typography'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -23,8 +25,10 @@ import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { MdOptionModal } from '../../components/md-option-modal'
+import { OptionsBtn } from '../../components/options-btn'
 import { i18n } from '../../i18n'
 import {
+  appendNode,
   clearDoneNode,
   compileMd,
   getArray,
@@ -33,7 +37,6 @@ import {
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
-import { OptionsBtn } from '../../components/options-btn'
 
 const { Text, Title } = Typography
 
@@ -66,18 +69,24 @@ export const PageTodoTree = () => {
   const location = useLocation()
   const params = location?.search ? parseUrlParam(location.search) : {}
 
+  // new node position
+  const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
+  const [mounted, setMounted] = useState(false)
+
   const loadSource = async () => {
-    callService<Services, 'GetStore'>('GetStore', {
+    const todo = await callService<Services, 'GetStore'>('GetStore', {
       key: KEY_TODO_TREE,
       path: params?.file,
-    }).then(todo => {
-      if (todo) {
-        const val: IStoreTodoTree = todo
-        treeRef.current = getArray(val.tree)
-        expandKeysRef.current = getArray(val.expandKeys)
-        forceUpdate()
-      }
     })
+    if (todo) {
+      const val: IStoreTodoTree = todo
+      treeRef.current = getArray(val.tree)
+      expandKeysRef.current = getArray(val.expandKeys)
+      //update
+      val.add_mode && setMode(val.add_mode)
+      // forceUpdate()
+    }
+    setMounted(true)
   }
 
   useEffect(() => {
@@ -166,7 +175,11 @@ export const PageTodoTree = () => {
           <OptionsBtn
             onCopy={() => node}
             onPaste={copyNode => {
-              insertNode(node.children, copyNode)
+              if (addMode === 'top') {
+                insertNode(node.children, copyNode)
+              } else {
+                appendNode(node.children, copyNode)
+              }
               updateTree()
               updateExpandKeys([copyNode.key], 'push')
             }}
@@ -218,7 +231,11 @@ export const PageTodoTree = () => {
         todo: node.todo,
       }),
     }
-    insertNode(getContainer(), node)
+    if (addMode === 'top') {
+      insertNode(getContainer(), node)
+    } else {
+      appendNode(getContainer(), node)
+    }
   }
 
   const save = async () => {
@@ -227,6 +244,7 @@ export const PageTodoTree = () => {
       expandKeys: expandKeysRef.current,
       schema:
         'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26',
+      add_mode: addMode,
     }
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
@@ -235,14 +253,11 @@ export const PageTodoTree = () => {
     })
   }
 
-  const isMounted = useRef(false)
   useEffect(() => {
-    if (isMounted.current) {
+    if (mounted) {
       save()
-    } else {
-      isMounted.current = true
     }
-  }, [treeRef.current])
+  }, [treeRef.current, mounted, addMode])
 
   const percent = useMemo(
     () => calcProgressV2(treeRef.current),
@@ -254,6 +269,9 @@ export const PageTodoTree = () => {
   // md modal
   const [showMdOptionsModal, setShowMdOptionsModal] = useState(false)
 
+  const toolsWrapperRef = useRef<HTMLDivElement>()
+  const todoTreeLength = getArray(treeRef.current).length
+
   return (
     <div className="PageTodoList">
       <div className="layout">
@@ -263,21 +281,31 @@ export const PageTodoTree = () => {
         </Space>
         <Divider />
         <div className="tree-wrapper">
-          <Tree
-            titleRender={(node: TreeNode) => <Item node={node} />}
-            expandedKeys={expandKeysRef.current}
-            onExpand={keys => updateExpandKeys(keys, 'replace')}
-            draggable
-            blockNode
-            onDrop={treeDrop(treeRef.current, data => {
-              treeRef.current = data
-              updateTree()
-            })}
-            treeData={treeRef.current}
-          />
+          <Spin spinning={!mounted}>
+            {todoTreeLength > 0 ? (
+              <Tree
+                titleRender={(node: TreeNode) => <Item node={node} />}
+                expandedKeys={expandKeysRef.current}
+                onExpand={keys => updateExpandKeys(keys, 'replace')}
+                draggable
+                blockNode
+                onDrop={treeDrop(treeRef.current, data => {
+                  treeRef.current = data
+                  updateTree()
+                })}
+                treeData={treeRef.current}
+              />
+            ) : (
+              <Empty
+                description={
+                  mounted ? i18n.format('null') : i18n.format('loading')
+                }
+              />
+            )}
+          </Spin>
         </div>
         <Affix offsetBottom={0}>
-          <div className="tools-wrapper">
+          <div className="tools-wrapper" ref={toolsWrapperRef}>
             <Divider className="tools-wrapper-div" style={{ margin: 0 }} />
             <Space split={<Divider type="vertical" />}>
               <Button
@@ -330,6 +358,19 @@ export const PageTodoTree = () => {
               >
                 {i18n.format('parsemd')}
               </Button>
+              <Select
+                getPopupContainer={() => toolsWrapperRef.current}
+                bordered={false}
+                value={addMode}
+                onSelect={value => setMode(value)}
+              >
+                <Select.Option value="top">
+                  {i18n.format('create_mode_top')}
+                </Select.Option>
+                <Select.Option value="bottom">
+                  {i18n.format('create_mode_bottom')}
+                </Select.Option>
+              </Select>
             </Space>
           </div>
         </Affix>

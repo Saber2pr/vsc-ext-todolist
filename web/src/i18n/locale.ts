@@ -24,6 +24,10 @@ export const localeMap = {
     copy: 'Copy',
     copy_success: 'Copy success',
     paste: 'Paste',
+    create_mode_top: 'Add Mode(Top)',
+    create_mode_bottom: 'Add Mode(Bottom)',
+    null: 'No backlog, Please click New',
+    loading: 'Loading data',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -50,5 +54,9 @@ export const localeMap = {
     copy: '复制',
     copy_success: '复制成功',
     paste: '粘贴',
+    create_mode_top: '增加位置(顶部)',
+    create_mode_bottom: '增加位置(底部)',
+    null: '暂无待办，请点击新建待办',
+    loading: '正在加载数据',
   },
 }

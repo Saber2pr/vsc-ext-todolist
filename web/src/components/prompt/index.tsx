@@ -35,7 +35,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
     >
       <Form form={form} onFinish={values => onOk(values?.value)}>
         <Form.Item name="value" initialValue={value}>
-          <Input placeholder={placeholder} />
+          <Input placeholder={placeholder} allowClear />
         </Form.Item>
       </Form>
     </Modal>

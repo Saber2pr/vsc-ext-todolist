@@ -4,6 +4,7 @@ import { TreeNode } from './tree'
 export interface ParseMarkdownOptions {
   noTab?: boolean
   displayDone?: boolean
+  displayLink?: boolean
 }
 
 const compileMarkdown = (
@@ -16,9 +17,17 @@ const compileMarkdown = (
     .map(node => {
       const noTab = opts.noTab
       const displayDone = opts.displayDone
+      const displayLink = opts.displayLink
 
       let text = node.todo.content
       let done = node.todo.done
+
+      if (displayLink) {
+        const link = node.todo.link
+        if (link) {
+          text = `[${text}](${link})`
+        }
+      }
 
       let padStart =
         Array(depth * 2)
@@ -65,8 +74,8 @@ const compileMarkdown = (
     .join(opts.noTab ? '\n' : '')
 
 export const compileMd = (tree: TreeNode[], opts: ParseMarkdownOptions) => {
-  const { noTab, displayDone } = opts ?? {}
-  const md = compileMarkdown(tree, { noTab, displayDone })
+  const { noTab, displayDone, displayLink } = opts ?? {}
+  const md = compileMarkdown(tree, { noTab, displayDone, displayLink })
   if (noTab) {
     return md
       .split('\n')

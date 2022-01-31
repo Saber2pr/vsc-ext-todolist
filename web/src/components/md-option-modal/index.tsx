@@ -22,6 +22,7 @@ interface MdUseTabOption {
 interface MdOptions {
   useTab: MdUseTabOption['value']
   displayDone: boolean
+  displayLink: boolean
 }
 
 export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
@@ -55,6 +56,7 @@ export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 14 }}
         onFinish={values => onOk(values)}
+        size="small"
       >
         <Form.Item
           label={i18n.format('md_tab')}
@@ -72,6 +74,13 @@ export const MdOptionModal = ({ onCancel, onOk, visible }: MdOptionModal) => {
         <Form.Item
           label={i18n.format('md_display_done')}
           name="displayDone"
+          initialValue={false}
+        >
+          <FormCheckbox />
+        </Form.Item>
+        <Form.Item
+          label={i18n.format('md_display_link')}
+          name="displayLink"
           initialValue={false}
         >
           <FormCheckbox />

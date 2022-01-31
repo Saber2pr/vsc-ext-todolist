@@ -1,8 +1,7 @@
-
-import Button from "antd/lib/button";
-import Dropdown from "antd/lib/dropdown";
-import Menu from "antd/lib/menu";
-import message from "antd/lib/message";
+import Button from 'antd/lib/button'
+import Dropdown from 'antd/lib/dropdown'
+import Menu from 'antd/lib/menu'
+import message from 'antd/lib/message'
 import React from 'react'
 
 import MoreOutlined from '@ant-design/icons/MoreOutlined'
@@ -11,19 +10,30 @@ import { callService } from '@saber2pr/vscode-webview'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
 import { cloneTree, TreeNode } from '../../utils'
+import { usePromptModal } from '../prompt'
 
 import type { Services } from '../../../../src/api/type'
 export interface OptionsBtnProps {
-  onCopy: () => TreeNode
+  node: TreeNode
   onPaste: (node: TreeNode) => void
+  onAddLink: (link: string) => void
 }
 
-export const OptionsBtn: React.FC<OptionsBtnProps> = ({ onCopy, onPaste }) => {
+export const OptionsBtn: React.FC<OptionsBtnProps> = ({
+  onPaste,
+  onAddLink,
+  node,
+}) => {
+  const { modal, setVisible } = usePromptModal({
+    onOk: onAddLink,
+    placeholder: i18n.format('add_link'),
+    title: i18n.format('add_link'),
+    value: node?.todo?.link,
+  })
   const menu = (
     <Menu>
       <Menu.Item
         onClick={async () => {
-          const node = onCopy()
           await callService<Services, 'SetTemp'>('SetTemp', {
             key: KEY_TODO_TREE,
             value: JSON.parse(JSON.stringify(node)),
@@ -47,6 +57,14 @@ export const OptionsBtn: React.FC<OptionsBtnProps> = ({ onCopy, onPaste }) => {
       >
         {i18n.format('paste')}
       </Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          setVisible(true)
+        }}
+      >
+        {i18n.format('add_link')}
+      </Menu.Item>
+      {modal}
     </Menu>
   )
 

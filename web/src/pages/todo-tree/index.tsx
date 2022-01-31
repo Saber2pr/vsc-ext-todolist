@@ -1,4 +1,5 @@
 import './style.less'
+import 'nprogress/nprogress.css'
 
 import Affix from 'antd/lib/affix'
 import Button from 'antd/lib/button'
@@ -12,6 +13,7 @@ import Space from 'antd/lib/space'
 import Spin from 'antd/lib/spin'
 import Tree from 'antd/lib/tree'
 import Typography from 'antd/lib/typography'
+import nprogress from 'nprogress'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 
@@ -26,6 +28,7 @@ import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { MdOptionModal } from '../../components/md-option-modal'
 import { OptionsBtn } from '../../components/options-btn'
+import { useSettingsModal } from '../../components/settings'
 import { i18n } from '../../i18n'
 import {
   appendNode,
@@ -37,10 +40,15 @@ import {
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
+import { TodoItem } from '../../components/todo-item'
 
-const { Text, Title } = Typography
+const { Text, Title, Link } = Typography
 
 let events: VoidFunction[] = []
+
+nprogress.configure({
+  showSpinner: false,
+})
 
 export const PageTodoTree = () => {
   const [_, setState] = useState({})
@@ -173,7 +181,7 @@ export const PageTodoTree = () => {
             <Button size="small" type="text" icon={<DeleteOutlined />} />
           </Popconfirm>
           <OptionsBtn
-            onCopy={() => node}
+            node={node}
             onPaste={copyNode => {
               if (addMode === 'top') {
                 insertNode(node.children, copyNode)
@@ -183,6 +191,10 @@ export const PageTodoTree = () => {
               updateTree()
               updateExpandKeys([copyNode.key], 'push')
             }}
+            onAddLink={link => {
+              todo.link = link
+              updateTree()
+            }}
           />
         </>
       )
@@ -190,24 +202,7 @@ export const PageTodoTree = () => {
 
     return (
       <Space className="todo">
-        <Text
-          delete={todo.done}
-          type={todo.level === 'default' ? null : todo.level}
-          disabled={todo.done ? true : false}
-          editable={
-            todo.done
-              ? false
-              : {
-                  tooltip: false,
-                  onChange: value => {
-                    todo.content = value
-                    updateTree()
-                  },
-                }
-          }
-        >
-          {todo.content}
-        </Text>
+        <TodoItem todo={todo} onChange={() => updateTree()} />
         {ops}
       </Space>
     )
@@ -239,6 +234,7 @@ export const PageTodoTree = () => {
   }
 
   const save = async () => {
+    nprogress.start()
     const storeVal: IStoreTodoTree = {
       tree: treeRef.current,
       expandKeys: expandKeysRef.current,
@@ -246,11 +242,16 @@ export const PageTodoTree = () => {
         'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26',
       add_mode: addMode,
     }
+    const tree = JSON.parse(JSON.stringify(storeVal))
     await callService<Services, 'Store'>('Store', {
       key: KEY_TODO_TREE,
-      value: JSON.parse(JSON.stringify(storeVal)),
+      value: tree,
       path: params?.file,
     })
+    nprogress.done()
+    return {
+      [KEY_TODO_TREE]: tree,
+    }
   }
 
   useEffect(() => {
@@ -271,6 +272,28 @@ export const PageTodoTree = () => {
 
   const toolsWrapperRef = useRef<HTMLDivElement>()
   const todoTreeLength = getArray(treeRef.current).length
+
+  // settings
+  const { modal, setVisible } = useSettingsModal({
+    initValues: {
+      add_mode: addMode,
+    },
+    async onFinish(values) {
+      setMode(values?.add_mode)
+      message.success(i18n.format('settingTip'))
+      setVisible(false)
+    },
+    async onSaveAs() {
+      const content = await save()
+      await callService<Services, 'SaveFileAs'>('SaveFileAs', {
+        content: JSON.stringify(content),
+        name: `${TITLE}.todo`,
+      })
+    },
+    async onParseMd() {
+      setShowMdOptionsModal(true)
+    },
+  })
 
   return (
     <div className="PageTodoList">
@@ -351,24 +374,11 @@ export const PageTodoTree = () => {
               <Button
                 type="text"
                 onClick={() => {
-                  setShowMdOptionsModal(true)
+                  setVisible(true)
                 }}
               >
-                {i18n.format('parsemd')}
+                {i18n.format('setting')}
               </Button>
-              <Select
-                getPopupContainer={() => toolsWrapperRef.current}
-                bordered={false}
-                value={addMode}
-                onSelect={value => setMode(value)}
-              >
-                <Select.Option value="top">
-                  {i18n.format('create_mode_top')}
-                </Select.Option>
-                <Select.Option value="bottom">
-                  {i18n.format('create_mode_bottom')}
-                </Select.Option>
-              </Select>
             </Space>
           </div>
         </Affix>
@@ -383,6 +393,7 @@ export const PageTodoTree = () => {
                 content: compileMd(treeRef.current, {
                   noTab: values.useTab === 'no-tab',
                   displayDone: values.displayDone,
+                  displayLink: values.displayLink,
                 }),
               })
               message.success(i18n.format('createTip'))
@@ -390,6 +401,7 @@ export const PageTodoTree = () => {
             }
           }}
         />
+        {modal}
       </div>
     </div>
   )

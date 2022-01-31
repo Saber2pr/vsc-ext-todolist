@@ -13,6 +13,7 @@ export type Services = {
   GetStore: Pair<{ key: string; path?: string }, any>
   GetLanguage: Pair<any, any>
   SaveFile: Pair<{ path: string; content: string }, any>
+  SaveFileAs: Pair<{ name: string; content: string }, any>
   // temp
   SetTemp: Pair<{ key: string; value: any }, any>
   GetTemp: Pair<{ key: string }, any>
@@ -23,6 +24,7 @@ export type ITodoItem = {
   content: string
   done: boolean
   level: 'secondary' | 'default' | 'success' | 'warning' | 'danger'
+  link?: string
   pendingDelete?: boolean
 }
 

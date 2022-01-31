@@ -1,37 +1,54 @@
-import './style.less'
-
 import Typography from 'antd/lib/typography'
-import React from 'react'
+import React, { useState } from 'react'
 
-import { ITodoItem } from '../../../../src/api/type'
+import type { ITodoItem } from '../../../../src/api/type'
+const { Text } = Typography
 
-const { Paragraph } = Typography
-
-export interface TodoItem extends ITodoItem {
-  onEditEnd(value: string): void
+export interface TodoItemProps {
+  todo: ITodoItem
+  onChange: VoidFunction
 }
 
-export const TodoItem = ({
-  done,
-  content,
-  onEditEnd: onChange,
-  level,
-}: TodoItem) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
+  const [editing, setEditing] = useState(false)
   return (
-    <Paragraph
-      delete={done}
-      type={level === 'default' ? null : level}
-      disabled={done ? true : false}
+    <Text
+      delete={todo.done}
+      type={todo.level === 'default' ? null : todo.level}
+      disabled={todo.done ? true : false}
       editable={
-        done
+        todo.done
           ? false
           : {
               tooltip: false,
-              onChange,
+              editing: editing,
+              onStart() {
+                setEditing(true)
+              },
+              onEnd() {
+                setEditing(false)
+              },
+              onCancel() {
+                setEditing(false)
+              },
+              onChange: value => {
+                if (todo.content !== value) {
+                  todo.content = value
+                  onChange()
+                } else {
+                  setEditing(false)
+                }
+              },
             }
       }
     >
-      {content}
-    </Paragraph>
+      {editing ? (
+        todo.content
+      ) : todo.link ? (
+        <a href={todo.link}>{todo.content}</a>
+      ) : (
+        todo.content
+      )}
+    </Text>
   )
 }

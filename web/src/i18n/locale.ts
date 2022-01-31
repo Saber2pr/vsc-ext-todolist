@@ -36,6 +36,7 @@ export const localeMap = {
     save_as: 'Save as',
     more_options: 'More Options',
     add_link: 'Edit Link',
+    add_link_holder: 'please enter the link',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -74,5 +75,6 @@ export const localeMap = {
     save_as: '另存为',
     more_options: '更多选项',
     add_link: '编辑链接',
+    add_link_holder: '请输入链接',
   },
 }

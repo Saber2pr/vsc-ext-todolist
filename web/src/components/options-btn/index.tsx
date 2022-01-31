@@ -26,7 +26,7 @@ export const OptionsBtn: React.FC<OptionsBtnProps> = ({
 }) => {
   const { modal, setVisible } = usePromptModal({
     onOk: onAddLink,
-    placeholder: i18n.format('add_link'),
+    placeholder: i18n.format('add_link_holder'),
     title: i18n.format('add_link'),
     value: node?.todo?.link,
   })

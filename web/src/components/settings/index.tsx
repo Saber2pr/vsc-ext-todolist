@@ -1,12 +1,12 @@
-
-import Divider from "antd/lib/divider";
-import Space from "antd/lib/space";
 import Button from 'antd/lib/button'
+import Divider from 'antd/lib/divider'
 import Form from 'antd/lib/form'
 import Modal from 'antd/lib/modal'
 import Select from 'antd/lib/select'
+import Space from 'antd/lib/space'
 import React, { useEffect, useState } from 'react'
 
+import { FormCheckbox } from '../'
 import { i18n } from '../../i18n'
 
 export interface SettingsProps {
@@ -20,6 +20,7 @@ export interface SettingsProps {
 
 type FormValues = {
   add_mode: 'top' | 'bottom'
+  virtual?: boolean
 }
 
 export const Settings: React.FC<SettingsProps> = ({
@@ -63,6 +64,13 @@ export const Settings: React.FC<SettingsProps> = ({
               },
             ]}
           />
+        </Form.Item>
+        <Form.Item
+          label={i18n.format('scroll_virtual')}
+          tooltip={i18n.format('scroll_virtual_tip')}
+          name="virtual"
+        >
+          <FormCheckbox />
         </Form.Item>
       </Form>
       <Divider>{i18n.format('more_options')}</Divider>

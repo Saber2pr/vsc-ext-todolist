@@ -77,10 +77,12 @@ export const PageTodoTree = () => {
   const location = useLocation()
   const params = location?.search ? parseUrlParam(location.search) : {}
 
-  // new node position
-  const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
   const [mounted, setMounted] = useState(false)
+  // settings
+  const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
+  const [virtualMode, setVirtual] = useState<boolean>(false)
 
+  // init
   const loadSource = async () => {
     const todo = await callService<Services, 'GetStore'>('GetStore', {
       key: KEY_TODO_TREE,
@@ -92,6 +94,7 @@ export const PageTodoTree = () => {
       expandKeysRef.current = getArray(val.expandKeys)
       //update
       val.add_mode && setMode(val.add_mode)
+      setVirtual(!!val.virtual)
       // forceUpdate()
     }
     setMounted(true)
@@ -241,6 +244,7 @@ export const PageTodoTree = () => {
       schema:
         'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26',
       add_mode: addMode,
+      virtual: virtualMode,
     }
     const tree = JSON.parse(JSON.stringify(storeVal))
     await callService<Services, 'Store'>('Store', {
@@ -258,7 +262,7 @@ export const PageTodoTree = () => {
     if (mounted) {
       save()
     }
-  }, [treeRef.current, mounted, addMode])
+  }, [treeRef.current, mounted, addMode, virtualMode])
 
   const percent = useMemo(
     () => calcProgressV2(treeRef.current),
@@ -277,9 +281,11 @@ export const PageTodoTree = () => {
   const { modal, setVisible } = useSettingsModal({
     initValues: {
       add_mode: addMode,
+      virtual: virtualMode,
     },
     async onFinish(values) {
       setMode(values?.add_mode)
+      setVirtual(!!values?.virtual)
       message.success(i18n.format('settingTip'))
       setVisible(false)
     },
@@ -307,6 +313,8 @@ export const PageTodoTree = () => {
           <Spin spinning={!mounted} tip={i18n.format('loading')}>
             {todoTreeLength > 0 ? (
               <Tree
+                motion={null}
+                height={virtualMode ? 500 : undefined}
                 titleRender={(node: TreeNode) => <Item node={node} />}
                 expandedKeys={expandKeysRef.current}
                 onExpand={keys => updateExpandKeys(keys, 'replace')}

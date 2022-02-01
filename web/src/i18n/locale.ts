@@ -37,6 +37,9 @@ export const localeMap = {
     more_options: 'More Options',
     add_link: 'Edit Link',
     add_link_holder: 'please enter the link',
+    scroll_virtual: 'Enable virtual scrolling',
+    scroll_virtual_tip:
+      'Improved response speed, but reduced scrolling performance. (recommended for a long list)',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -76,5 +79,7 @@ export const localeMap = {
     more_options: '更多选项',
     add_link: '编辑链接',
     add_link_holder: '请输入链接',
+    scroll_virtual: '开启虚拟滚动',
+    scroll_virtual_tip: '提升响应速度，但降低滚动性能。（长列表推荐开启）',
   },
 }

@@ -3,7 +3,7 @@ import { Pair } from '@saber2pr/vscode-webview'
 export type IStoreTodoTree = {
   tree: ITodoTree[]
   expandKeys: Key[]
-  schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26'
+  schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3'
   add_mode: 'top' | 'bottom'
   virtual?: boolean
 }

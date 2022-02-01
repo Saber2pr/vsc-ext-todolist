@@ -41,6 +41,20 @@ extra todo file support:
 
 - Edit `*.todo`, `.todolistrc` files in the Todo editor!
 
+> tip: It is recommended to use Git to manage historical versions of todo files.
+
+## New Features
+
+> 2022-02-01 v0.1.16
+
+1. Add Mode
+2. Virtual Scrolling
+3. Copy & Paste
+4. Edit Link
+
+<img width="40%" src="https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todolist-settings-view.webp" />
+<img width="20%" src="https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todolist-ops-view.webp" />
+
 ## More
 
 1. Feedback and opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)

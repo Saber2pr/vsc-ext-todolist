@@ -77,7 +77,7 @@ export const PageTodoTree = () => {
   const location = useLocation()
   const params = location?.search ? parseUrlParam(location.search) : {}
 
-  const [mounted, setMounted] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   // settings
   const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
   const [virtualMode, setVirtual] = useState<boolean>(false)
@@ -97,7 +97,7 @@ export const PageTodoTree = () => {
       setVirtual(!!val.virtual)
       // forceUpdate()
     }
-    setMounted(true)
+    setLoaded(true)
   }
 
   useEffect(() => {
@@ -258,11 +258,15 @@ export const PageTodoTree = () => {
     }
   }
 
+  const isMounted = useRef(false)
   useEffect(() => {
-    if (mounted) {
+    if (isMounted.current) {
       save()
     }
-  }, [treeRef.current, mounted, addMode, virtualMode])
+    if (loaded) {
+      isMounted.current = true
+    }
+  }, [treeRef.current])
 
   const percent = useMemo(
     () => calcProgressV2(treeRef.current),
@@ -288,6 +292,7 @@ export const PageTodoTree = () => {
       setVirtual(!!values?.virtual)
       message.success(i18n.format('settingTip'))
       setVisible(false)
+      updateTree()
     },
     async onSaveAs() {
       const content = await save()
@@ -310,7 +315,7 @@ export const PageTodoTree = () => {
         </Space>
         <Divider />
         <div className="tree-wrapper">
-          <Spin spinning={!mounted} tip={i18n.format('loading')}>
+          <Spin spinning={!loaded} tip={i18n.format('loading')}>
             {todoTreeLength > 0 ? (
               <Tree
                 motion={null}
@@ -326,7 +331,7 @@ export const PageTodoTree = () => {
                 })}
                 treeData={treeRef.current}
               />
-            ) : mounted ? (
+            ) : loaded ? (
               <Empty description={i18n.format('null')} />
             ) : (
               <div style={{ height: 100 }}></div>

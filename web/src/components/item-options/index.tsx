@@ -17,12 +17,16 @@ export interface OptionsBtnProps {
   node: TreeNode
   onPaste: (node: TreeNode) => void
   onAddLink: (link: string) => void
+  onExpandAll: (node: TreeNode) => void
+  onCollapseAll: (node: TreeNode) => void
 }
 
 export const ItemOptions: React.FC<OptionsBtnProps> = ({
   onPaste,
   onAddLink,
   node,
+  onCollapseAll,
+  onExpandAll,
 }) => {
   const { modal, setVisible } = usePromptModal({
     onOk: onAddLink,
@@ -32,6 +36,12 @@ export const ItemOptions: React.FC<OptionsBtnProps> = ({
   })
   const menu = (
     <Menu>
+      <Menu.Item onClick={() => onCollapseAll(node)}>
+        {i18n.format('collapseAll')}
+      </Menu.Item>
+      <Menu.Item onClick={() => onExpandAll(node)}>
+        {i18n.format('expandAll')}
+      </Menu.Item>
       <Menu.Item
         onClick={async () => {
           await callService<Services, 'SetTemp'>('SetTemp', {

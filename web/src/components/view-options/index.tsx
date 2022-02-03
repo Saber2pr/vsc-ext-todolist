@@ -18,10 +18,10 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
   const menu = (
     <Menu>
       <Menu.Item onClick={onUpdate}>{i18n.format('update')}</Menu.Item>
-      <Menu.Item onClick={onExpandAll}>{i18n.format('expandAll')}</Menu.Item>
       <Menu.Item onClick={onCollapseAll}>
         {i18n.format('collapseAll')}
       </Menu.Item>
+      <Menu.Item onClick={onExpandAll}>{i18n.format('expandAll')}</Menu.Item>
     </Menu>
   )
 

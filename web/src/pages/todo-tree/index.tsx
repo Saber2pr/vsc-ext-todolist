@@ -35,6 +35,7 @@ import {
   clearDoneNode,
   compileMd,
   getArray,
+  getTreeKeys,
   insertNode,
   mapTree,
   TreeNode,
@@ -200,6 +201,17 @@ export const PageTodoTree = () => {
             onAddLink={link => {
               todo.link = link
               updateTree()
+            }}
+            onCollapseAll={node => {
+              const keys = getTreeKeys(node)
+              const keysMap = keys.reduce((acc, k) => ({ ...acc, [k]: k }), {})
+              const currentKeys = getArray(expandKeysRef.current)
+              const nextKeys = currentKeys.filter(k => !keysMap[k])
+              updateExpandKeys(nextKeys, 'replace')
+            }}
+            onExpandAll={node => {
+              const keys = getTreeKeys(node)
+              updateExpandKeys(keys, 'push')
             }}
           />
         </>
@@ -386,11 +398,7 @@ export const PageTodoTree = () => {
                   updateExpandKeys([], 'replace')
                 }}
                 onExpandAll={() => {
-                  const keys = []
-                  mapTree(treeRef.current, node => {
-                    node.key && keys.push(node.key)
-                    return node
-                  })
+                  const keys = getTreeKeys(...treeRef.current)
                   updateExpandKeys(keys, 'replace')
                 }}
               />

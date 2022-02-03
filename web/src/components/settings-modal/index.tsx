@@ -6,7 +6,7 @@ import Select from 'antd/lib/select'
 import Space from 'antd/lib/space'
 import React, { useEffect, useState } from 'react'
 
-import { FormCheckbox } from '../'
+import { FormCheckbox } from '..'
 import { i18n } from '../../i18n'
 
 export interface SettingsProps {
@@ -23,7 +23,7 @@ type FormValues = {
   virtual?: boolean
 }
 
-export const Settings: React.FC<SettingsProps> = ({
+export const SettingsModal: React.FC<SettingsProps> = ({
   visible,
   onCancel,
   onFinish,
@@ -97,7 +97,7 @@ export const useSettingsModal = (ops: SettingsModalOps) => {
   const [visible, setVisible] = useState(false)
   return {
     modal: (
-      <Settings
+      <SettingsModal
         visible={visible}
         onCancel={() => setVisible(false)}
         onFinish={ops.onFinish}

@@ -27,8 +27,8 @@ import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { MdOptionModal } from '../../components/md-option-modal'
-import { OptionsBtn } from '../../components/options-btn'
-import { useSettingsModal } from '../../components/settings'
+import { ItemOptions } from '../../components/item-options'
+import { useSettingsModal } from '../../components/settings-modal'
 import { i18n } from '../../i18n'
 import {
   appendNode,
@@ -36,11 +36,13 @@ import {
   compileMd,
   getArray,
   insertNode,
+  mapTree,
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
 import { TodoItem } from '../../components/todo-item'
+import { ViewOptions } from '../../components/view-options'
 
 const { Text, Title, Link } = Typography
 
@@ -184,7 +186,7 @@ export const PageTodoTree = () => {
           >
             <Button size="small" type="text" icon={<DeleteOutlined />} />
           </Popconfirm>
-          <OptionsBtn
+          <ItemOptions
             node={node}
             onPaste={copyNode => {
               if (addMode === 'top') {
@@ -375,15 +377,23 @@ export const PageTodoTree = () => {
               >
                 <Button type="text">{i18n.format('clearDone')}</Button>
               </Popconfirm>
-              <Button
-                type="text"
-                onClick={async () => {
+              <ViewOptions
+                onUpdate={async () => {
                   await loadSource()
                   message.success(i18n.format('updateTip'))
                 }}
-              >
-                {i18n.format('update')}
-              </Button>
+                onCollapseAll={() => {
+                  updateExpandKeys([], 'replace')
+                }}
+                onExpandAll={() => {
+                  const keys = []
+                  mapTree(treeRef.current, node => {
+                    node.key && keys.push(node.key)
+                    return node
+                  })
+                  updateExpandKeys(keys, 'replace')
+                }}
+              />
               <Button
                 type="text"
                 onClick={() => {

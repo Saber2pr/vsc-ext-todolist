@@ -10,7 +10,7 @@ import { callService } from '@saber2pr/vscode-webview'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
 import { cloneTree, TreeNode } from '../../utils'
-import { usePromptModal } from '../prompt'
+import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
 export interface OptionsBtnProps {
@@ -19,7 +19,7 @@ export interface OptionsBtnProps {
   onAddLink: (link: string) => void
 }
 
-export const OptionsBtn: React.FC<OptionsBtnProps> = ({
+export const ItemOptions: React.FC<OptionsBtnProps> = ({
   onPaste,
   onAddLink,
   node,

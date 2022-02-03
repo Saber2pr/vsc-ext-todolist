@@ -10,7 +10,7 @@ export const localeMap = {
     clearDoneTip: 'Are you sure to clear completed items?',
     update: 'Update List',
     updateTip: 'The update is successful',
-    setting: 'Setting',
+    setting: 'Settings',
     settingTip: 'Setting success',
     createTip: 'Create success',
     parsemd: 'Create Md',
@@ -40,6 +40,9 @@ export const localeMap = {
     scroll_virtual: 'Enable virtual scrolling',
     scroll_virtual_tip:
       'Improved response speed, but reduced scrolling performance. (recommended for a long list)',
+    expandAll: 'Expand All',
+    collapseAll: 'Collapse All',
+    viewOps: 'View',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -81,5 +84,8 @@ export const localeMap = {
     add_link_holder: '请输入链接',
     scroll_virtual: '开启虚拟滚动',
     scroll_virtual_tip: '提升响应速度，但降低滚动性能。（长列表推荐开启）',
+    expandAll: '展开全部',
+    collapseAll: '折叠全部',
+    viewOps: '视图',
   },
 }

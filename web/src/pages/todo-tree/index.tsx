@@ -84,6 +84,7 @@ export const PageTodoTree = () => {
 
   // init
   const loadSource = async () => {
+    setLoaded(false)
     const todo = await callService<Services, 'GetStore'>('GetStore', {
       key: KEY_TODO_TREE,
       path: params?.file,
@@ -92,10 +93,10 @@ export const PageTodoTree = () => {
       const val: IStoreTodoTree = todo
       treeRef.current = getArray(val.tree)
       expandKeysRef.current = getArray(val.expandKeys)
-      //update
+      //settings
       val.add_mode && setMode(val.add_mode)
       setVirtual(!!val.virtual)
-      // forceUpdate()
+      forceUpdate()
     }
     setLoaded(true)
   }
@@ -266,7 +267,7 @@ export const PageTodoTree = () => {
     if (loaded) {
       isMounted.current = true
     }
-  }, [treeRef.current])
+  }, [loaded, treeRef.current, expandKeysRef.current, addMode, virtualMode])
 
   const percent = useMemo(
     () => calcProgressV2(treeRef.current),
@@ -292,7 +293,6 @@ export const PageTodoTree = () => {
       setVirtual(!!values?.virtual)
       message.success(i18n.format('settingTip'))
       setVisible(false)
-      updateTree()
     },
     async onSaveAs() {
       const content = await save()

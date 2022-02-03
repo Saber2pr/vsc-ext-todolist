@@ -1,4 +1,6 @@
-import { Button, Dropdown, Menu } from 'antd'
+import Button from 'antd/lib/button'
+import Dropdown from 'antd/lib/dropdown'
+import Menu from 'antd/lib/menu'
 import React from 'react'
 import MoreOutlined from '@ant-design/icons/MoreOutlined'
 

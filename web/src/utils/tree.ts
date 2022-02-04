@@ -25,15 +25,15 @@ export const findNode = (treeNode: TreeNode[], key: number): TreeNode => {
   }
 }
 
-export const appendNode = (container: TreeNode[], node: TreeNode) => {
+export const appendNodes = (container: TreeNode[], ...node: TreeNode[]) => {
   if (Array.isArray(container)) {
-    container.push(node)
+    container.push(...node)
   }
 }
 
-export const insertNode = (container: TreeNode[], node: TreeNode) => {
+export const insertNodes = (container: TreeNode[], ...node: TreeNode[]) => {
   if (Array.isArray(container)) {
-    container.unshift(node)
+    container.unshift(...node)
   }
 }
 
@@ -76,14 +76,13 @@ export const mapTree = <N extends TreeLike, T extends TreeLike>(
   return nextTree
 }
 
-export const cloneTree = (node: TreeNode) => {
+export const cloneTree = (tree: TreeNode[]) => {
   let i = 0
   const start = Date.now()
-  const tree = mapTree([node], n => {
+  return mapTree(tree, n => {
     const newNode = { ...n }
     i++
     newNode.key = start + i
     return newNode
   })
-  return tree[0]
 }

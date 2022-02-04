@@ -9,13 +9,13 @@ import { callService } from '@saber2pr/vscode-webview'
 
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
-import { cloneTree, TreeNode } from '../../utils'
+import { cloneTree, getArray, TreeNode } from '../../utils'
 import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
 export interface OptionsBtnProps {
   node: TreeNode
-  onPaste: (node: TreeNode) => void
+  onPaste: (tree: TreeNode[]) => void
   onAddLink: (link: string) => void
   onExpandAll: (node: TreeNode) => void
   onCollapseAll: (node: TreeNode) => void
@@ -46,7 +46,7 @@ export const ItemOptions: React.FC<OptionsBtnProps> = ({
         onClick={async () => {
           await callService<Services, 'SetTemp'>('SetTemp', {
             key: KEY_TODO_TREE,
-            value: JSON.parse(JSON.stringify(node)),
+            value: JSON.parse(JSON.stringify([node])),
           })
           message.success(i18n.format('copy_success'))
         }}
@@ -55,14 +55,13 @@ export const ItemOptions: React.FC<OptionsBtnProps> = ({
       </Menu.Item>
       <Menu.Item
         onClick={async () => {
-          const node: TreeNode = await callService<Services, 'GetTemp'>(
+          const tree: TreeNode[] = await callService<Services, 'GetTemp'>(
             'GetTemp',
             {
               key: KEY_TODO_TREE,
             }
           )
-          node.key = Date.now()
-          onPaste(cloneTree(node))
+          onPaste(cloneTree(getArray(tree)))
         }}
       >
         {i18n.format('paste')}

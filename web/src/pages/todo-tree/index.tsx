@@ -26,26 +26,25 @@ import { callService } from '@saber2pr/vscode-webview'
 import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
-import { MdOptionModal } from '../../components/md-option-modal'
 import { ItemOptions } from '../../components/item-options'
+import { MdOptionModal } from '../../components/md-option-modal'
 import { useSettingsModal } from '../../components/settings-modal'
+import { TodoItem } from '../../components/todo-item'
+import { ViewOptions } from '../../components/view-options'
 import { i18n } from '../../i18n'
 import {
-  appendNode,
+  appendNodes,
   clearDoneNode,
   compileMd,
   getArray,
   getTreeKeys,
-  insertNode,
-  mapTree,
+  insertNodes,
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { treeDrop } from '../../utils/treeDrop'
-import { TodoItem } from '../../components/todo-item'
-import { ViewOptions } from '../../components/view-options'
 
-const { Text, Title, Link } = Typography
+const { Title } = Typography
 
 let events: VoidFunction[] = []
 
@@ -189,14 +188,14 @@ export const PageTodoTree = () => {
           </Popconfirm>
           <ItemOptions
             node={node}
-            onPaste={copyNode => {
+            onPaste={tree => {
               if (addMode === 'top') {
-                insertNode(node.children, copyNode)
+                insertNodes(node.children, ...tree)
               } else {
-                appendNode(node.children, copyNode)
+                appendNodes(node.children, ...tree)
               }
               updateTree()
-              updateExpandKeys([copyNode.key], 'push')
+              updateExpandKeys([node.key], 'push')
             }}
             onAddLink={link => {
               todo.link = link
@@ -245,9 +244,9 @@ export const PageTodoTree = () => {
       }),
     }
     if (addMode === 'top') {
-      insertNode(getContainer(), node)
+      insertNodes(getContainer(), node)
     } else {
-      appendNode(getContainer(), node)
+      appendNodes(getContainer(), node)
     }
   }
 
@@ -390,6 +389,7 @@ export const PageTodoTree = () => {
                 <Button type="text">{i18n.format('clearDone')}</Button>
               </Popconfirm>
               <ViewOptions
+                tree={getArray(treeRef.current)}
                 onUpdate={async () => {
                   await loadSource()
                   message.success(i18n.format('updateTip'))
@@ -400,6 +400,16 @@ export const PageTodoTree = () => {
                 onExpandAll={() => {
                   const keys = getTreeKeys(...treeRef.current)
                   updateExpandKeys(keys, 'replace')
+                }}
+                onPaste={copyTree => {
+                  const current = getArray(treeRef.current)
+                  const newNodes = getArray(copyTree)
+                  if (addMode === 'top') {
+                    treeRef.current = newNodes.concat(current)
+                  } else {
+                    treeRef.current = current.concat(newNodes)
+                  }
+                  updateTree()
                 }}
               />
               <Button

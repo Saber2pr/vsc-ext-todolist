@@ -1,21 +1,31 @@
 import Button from 'antd/lib/button'
 import Dropdown from 'antd/lib/dropdown'
 import Menu from 'antd/lib/menu'
+import message from 'antd/lib/message'
 import React from 'react'
-import MoreOutlined from '@ant-design/icons/MoreOutlined'
 
+import MoreOutlined from '@ant-design/icons/MoreOutlined'
+import { callService } from '@saber2pr/vscode-webview'
+
+import { Services } from '../../../../src/api/type'
+import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
+import { cloneTree, getArray, TreeNode } from '../../utils'
 
 export interface ViewOptionsProps {
+  tree: TreeNode[]
   onUpdate: VoidFunction
   onExpandAll: VoidFunction
   onCollapseAll: VoidFunction
+  onPaste: (tree: TreeNode[]) => any
 }
 
 export const ViewOptions: React.FC<ViewOptionsProps> = ({
   onCollapseAll,
   onExpandAll,
   onUpdate,
+  onPaste,
+  tree,
 }) => {
   const menu = (
     <Menu>
@@ -24,6 +34,30 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
         {i18n.format('collapseAll')}
       </Menu.Item>
       <Menu.Item onClick={onExpandAll}>{i18n.format('expandAll')}</Menu.Item>
+      <Menu.Item
+        onClick={async () => {
+          await callService<Services, 'SetTemp'>('SetTemp', {
+            key: KEY_TODO_TREE,
+            value: JSON.parse(JSON.stringify(getArray(tree))),
+          })
+          message.success(i18n.format('copy_success'))
+        }}
+      >
+        {i18n.format('copy')}
+      </Menu.Item>
+      <Menu.Item
+        onClick={async () => {
+          const tree: TreeNode[] = await callService<Services, 'GetTemp'>(
+            'GetTemp',
+            {
+              key: KEY_TODO_TREE,
+            }
+          )
+          onPaste(cloneTree(getArray(tree)))
+        }}
+      >
+        {i18n.format('paste')}
+      </Menu.Item>
     </Menu>
   )
 

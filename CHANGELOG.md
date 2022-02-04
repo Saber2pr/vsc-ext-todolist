@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.18](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.17...v0.1.18) (2022-02-04)
+
+
+### Features
+
+* view copy & paste ([9ab81e5](https://github.com/Saber2pr/vsc-ext-todolist/commit/9ab81e580d3a990b981872639e263ca0cb71f20b))
+
+
+### Bug Fixes
+
+* expandKeys render ([d6f6a05](https://github.com/Saber2pr/vsc-ext-todolist/commit/d6f6a05ddc64c28d6fa518ab3622aaa27c3b77a1))
+
 ### [0.1.17](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.16...v0.1.17) (2022-02-03)
 
 

@@ -121,7 +121,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(statusBar)
 }
 
-// uninstall
 export function deactivate() {
   if (statusBar) {
     statusBar.hide()

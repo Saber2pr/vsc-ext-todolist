@@ -272,6 +272,14 @@ export const PageTodoTree = () => {
     }
   }
 
+  // first render expandKeys
+  useEffect(() => {
+    // after tree rendered
+    if (!isMounted.current) {
+      updateExpandKeys(getArray(expandKeysRef.current), 'replace')
+    }
+  }, [treeRef.current])
+
   const isMounted = useRef(false)
   useEffect(() => {
     if (isMounted.current) {

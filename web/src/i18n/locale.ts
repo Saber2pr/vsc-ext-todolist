@@ -45,6 +45,8 @@ export const localeMap = {
     collapseAll: 'Collapse All',
     viewOps: 'View',
     shareTip: 'Enjoy this extension? Share with your friends~',
+    save_md: 'Markdown Created',
+    save_file: 'File Saved',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -91,5 +93,7 @@ export const localeMap = {
     collapseAll: '折叠全部',
     viewOps: '视图',
     shareTip: '喜欢这个插件吗？将它推荐给朋友~',
+    save_md: 'Markdown 文件生成成功',
+    save_file: '文件保存成功',
   },
 }

@@ -26,8 +26,10 @@ const handleServiceMessage = createServiceHandler<Services>({
     return path
   },
   GetLanguage: () => vscode.env.language,
-  SaveFile: ({ path, content }) => saveWorkspaceFile(path, content),
-  SaveFileAs: ({ name, content }) => saveWorkspaceFileAs(name, content),
+  SaveFile: ({ path, content, title }) =>
+    saveWorkspaceFile(title, path, content),
+  SaveFileAs: ({ name, content, title }) =>
+    saveWorkspaceFileAs(title, name, content),
   GetTemp: ({ key }) => {
     const rc = new RCManager(FILE_TEMP_PATH)
     return rc.get(key)

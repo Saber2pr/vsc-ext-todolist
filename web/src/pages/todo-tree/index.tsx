@@ -328,6 +328,7 @@ export const PageTodoTree = () => {
     async onSaveAs() {
       const content = await save()
       await callService<Services, 'SaveFileAs'>('SaveFileAs', {
+        title: i18n.format('save_file'),
         content: JSON.stringify(content),
         name: `${TITLE}.todo`,
       })
@@ -446,6 +447,7 @@ export const PageTodoTree = () => {
             const tree = treeRef.current
             if (tree) {
               await callService<Services, 'SaveFile'>('SaveFile', {
+                title: i18n.format('save_md'),
                 path: `${TITLE}.md`,
                 content: compileMd(treeRef.current, {
                   noTab: values.useTab === 'no-tab',

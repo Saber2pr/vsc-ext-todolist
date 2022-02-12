@@ -13,34 +13,42 @@ import { cloneTree, getArray, TreeNode } from '../../utils'
 import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
+
 export interface OptionsBtnProps {
   node: TreeNode
   onPaste: (tree: TreeNode[]) => void
   onAddLink: (link: string) => void
   onExpandAll: (node: TreeNode) => void
+  onDelete: (node: TreeNode) => void
   onCollapseAll: (node: TreeNode) => void
+  menuOnly?: boolean
 }
 
-export const ItemOptions: React.FC<OptionsBtnProps> = ({
+export const useCreateItemMenu = ({
   onPaste,
   onAddLink,
   node,
   onCollapseAll,
   onExpandAll,
-}) => {
+  onDelete,
+}: OptionsBtnProps) => {
   const { modal, setVisible } = usePromptModal({
     onOk: onAddLink,
     placeholder: i18n.format('add_link_holder'),
     title: i18n.format('add_link'),
     value: node?.todo?.link,
   })
-  const menu = (
+
+  return (
     <Menu>
       <Menu.Item onClick={() => onCollapseAll(node)}>
         {i18n.format('collapseAll')}
       </Menu.Item>
       <Menu.Item onClick={() => onExpandAll(node)}>
         {i18n.format('expandAll')}
+      </Menu.Item>
+      <Menu.Item onClick={() => onDelete(node)}>
+        {i18n.format('delete')}
       </Menu.Item>
       <Menu.Item
         onClick={async () => {
@@ -76,7 +84,9 @@ export const ItemOptions: React.FC<OptionsBtnProps> = ({
       {modal}
     </Menu>
   )
-
+}
+export const ItemOptions: React.FC<OptionsBtnProps> = props => {
+  const menu = useCreateItemMenu(props)
   return (
     <Dropdown trigger={['click']} overlay={menu}>
       <Button size="small" type="text" icon={<MoreOutlined />}></Button>

@@ -1,3 +1,4 @@
+import { Typography } from 'antd'
 import Button from 'antd/lib/button'
 import Divider from 'antd/lib/divider'
 import Form from 'antd/lib/form'
@@ -8,6 +9,8 @@ import React, { useEffect, useState } from 'react'
 
 import { FormCheckbox } from '..'
 import { i18n } from '../../i18n'
+
+const Link = Typography.Link
 
 export interface SettingsProps {
   visible?: boolean
@@ -42,9 +45,23 @@ export const SettingsModal: React.FC<SettingsProps> = ({
       visible={visible}
       onCancel={onCancel}
       title={i18n.format('setting')}
-      onOk={() => form.submit()}
-      okText={i18n.format('confirm')}
-      cancelText={i18n.format('cancel')}
+      footer={
+        <div className="flex space-between align-items-center">
+          <Link
+            underline
+            style={{ fontSize: 12 }}
+            href="https://marketplace.visualstudio.com/items?itemName=saber2pr.todolist"
+          >
+            {i18n.format('shareTip')}
+          </Link>
+          <Space>
+            <Button onClick={onCancel}>{i18n.format('cancel')}</Button>
+            <Button type="primary" onClick={() => form.submit()}>
+              {i18n.format('confirm')}
+            </Button>
+          </Space>
+        </div>
+      }
     >
       <Form form={form} onFinish={onFinish} initialValues={initValues}>
         <Form.Item

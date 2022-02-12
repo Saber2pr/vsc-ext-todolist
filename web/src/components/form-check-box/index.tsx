@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from 'react'
 import Checkbox from 'antd/lib/checkbox'
 
 export const FormCheckbox = ({

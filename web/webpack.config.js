@@ -7,7 +7,7 @@ const publicPath = (resourcePath, context) =>
 
 module.exports = {
   entry: {
-    app: './src/index.tsx'
+    app: './src/index.tsx',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],

@@ -1,6 +1,7 @@
 import './style.less'
 import 'nprogress/nprogress.css'
 
+import { Dropdown, Modal } from 'antd'
 import Affix from 'antd/lib/affix'
 import Button from 'antd/lib/button'
 import Divider from 'antd/lib/divider'
@@ -11,14 +12,12 @@ import Progress from 'antd/lib/progress'
 import Select from 'antd/lib/select'
 import Space from 'antd/lib/space'
 import Spin from 'antd/lib/spin'
-import Tree from 'antd/lib/tree'
 import Typography from 'antd/lib/typography'
 import nprogress from 'nprogress'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 
 import CheckOutlined from '@ant-design/icons/CheckOutlined'
-import DeleteOutlined from '@ant-design/icons/DeleteOutlined'
 import PlusOutlined from '@ant-design/icons/PlusOutlined'
 import UndoOutlined from '@ant-design/icons/UndoOutlined'
 import { callService } from '@saber2pr/vscode-webview'
@@ -26,10 +25,15 @@ import { callService } from '@saber2pr/vscode-webview'
 import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
-import { ItemOptions } from '../../components/item-options'
+import {
+  ItemOptions,
+  OptionsBtnProps,
+  useCreateItemMenu,
+} from '../../components/item-options'
 import { MdOptionModal } from '../../components/md-option-modal'
 import { useSettingsModal } from '../../components/settings-modal'
 import { TodoItem } from '../../components/todo-item'
+import { TodoTree } from '../../components/tree'
 import { ViewOptions } from '../../components/view-options'
 import { i18n } from '../../i18n'
 import {
@@ -42,7 +46,6 @@ import {
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
-import { treeDrop } from '../../utils/treeDrop'
 
 const { Title } = Typography
 
@@ -119,6 +122,52 @@ export const PageTodoTree = () => {
     const todo = node.todo
 
     let ops = <></>
+
+    const itemOptions: OptionsBtnProps = {
+      node,
+      onPaste: tree => {
+        if (addMode === 'top') {
+          insertNodes(node.children, ...tree)
+        } else {
+          appendNodes(node.children, ...tree)
+        }
+        updateTree()
+        updateExpandKeys([node.key], 'push')
+      },
+      onAddLink: link => {
+        todo.link = link
+        updateTree()
+      },
+      onCollapseAll: node => {
+        const keys = getTreeKeys(node)
+        const keysMap = keys.reduce((acc, k) => ({ ...acc, [k]: k }), {})
+        const currentKeys = getArray(expandKeysRef.current)
+        const nextKeys = currentKeys.filter(k => !keysMap[k])
+        updateExpandKeys(nextKeys, 'replace')
+      },
+      onExpandAll: node => {
+        const keys = getTreeKeys(node)
+        updateExpandKeys(keys, 'push')
+      },
+      onDelete: () => {
+        Modal.confirm({
+          title: i18n.format('removeItemTip'),
+          content: node.todo.content,
+          okText: i18n.format('confirm'),
+          cancelText: i18n.format('cancel'),
+          onOk: () => {
+            todo.pendingDelete = true
+            treeRef.current = clearDoneNode(
+              treeRef.current,
+              node => node.todo.pendingDelete
+            )
+            updateTree()
+          },
+        })
+      },
+    }
+    const itemMenu = useCreateItemMenu(itemOptions)
+
     if (todo.done) {
       ops = (
         <>
@@ -170,58 +219,18 @@ export const PageTodoTree = () => {
               updateTree()
             }}
           />
-          <Popconfirm
-            placement="topLeft"
-            title={i18n.format('removeItemTip')}
-            onConfirm={() => {
-              todo.pendingDelete = true
-              treeRef.current = clearDoneNode(
-                treeRef.current,
-                node => node.todo.pendingDelete
-              )
-              updateTree()
-            }}
-            okText={i18n.format('confirm')}
-            cancelText={i18n.format('cancel')}
-          >
-            <Button size="small" type="text" icon={<DeleteOutlined />} />
-          </Popconfirm>
-          <ItemOptions
-            node={node}
-            onPaste={tree => {
-              if (addMode === 'top') {
-                insertNodes(node.children, ...tree)
-              } else {
-                appendNodes(node.children, ...tree)
-              }
-              updateTree()
-              updateExpandKeys([node.key], 'push')
-            }}
-            onAddLink={link => {
-              todo.link = link
-              updateTree()
-            }}
-            onCollapseAll={node => {
-              const keys = getTreeKeys(node)
-              const keysMap = keys.reduce((acc, k) => ({ ...acc, [k]: k }), {})
-              const currentKeys = getArray(expandKeysRef.current)
-              const nextKeys = currentKeys.filter(k => !keysMap[k])
-              updateExpandKeys(nextKeys, 'replace')
-            }}
-            onExpandAll={node => {
-              const keys = getTreeKeys(node)
-              updateExpandKeys(keys, 'push')
-            }}
-          />
+          <ItemOptions {...itemOptions} />
         </>
       )
     }
 
     return (
-      <Space className="todo">
-        <TodoItem todo={todo} onChange={() => updateTree()} />
-        {ops}
-      </Space>
+      <Dropdown trigger={['contextMenu']} overlay={itemMenu}>
+        <Space className="todo">
+          <TodoItem todo={todo} onChange={() => updateTree()} />
+          {ops}
+        </Space>
+      </Dropdown>
     )
   }
 
@@ -338,19 +347,17 @@ export const PageTodoTree = () => {
         <div className="tree-wrapper">
           <Spin spinning={!loaded} tip={i18n.format('loading')}>
             {todoTreeLength > 0 ? (
-              <Tree
-                motion={null}
-                height={virtualMode ? 500 : undefined}
+              <TodoTree
+                virtualMode={virtualMode}
                 titleRender={(node: TreeNode) => <Item node={node} />}
                 expandedKeys={expandKeysRef.current}
                 onExpand={keys => updateExpandKeys(keys, 'replace')}
-                draggable
-                blockNode
-                onDrop={treeDrop(treeRef.current, data => {
+                handleDrop={data => {
                   treeRef.current = data
                   updateTree()
-                })}
+                }}
                 treeData={treeRef.current}
+                itemOptions={null}
               />
             ) : loaded ? (
               <Empty description={i18n.format('null')} />

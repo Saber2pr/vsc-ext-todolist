@@ -1,5 +1,4 @@
-import Tree from 'antd/lib/tree'
-import { DataNode } from 'antd/lib/tree'
+import Tree, { DataNode } from 'antd/lib/tree'
 import React, { useState } from 'react'
 
 import { OptionsBtnProps } from '../'

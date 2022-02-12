@@ -1,13 +1,13 @@
-import { Typography } from 'antd'
 import Button from 'antd/lib/button'
 import Divider from 'antd/lib/divider'
 import Form from 'antd/lib/form'
 import Modal from 'antd/lib/modal'
 import Select from 'antd/lib/select'
 import Space from 'antd/lib/space'
+import Typography from 'antd/lib/typography'
 import React, { useEffect, useState } from 'react'
 
-import { FormCheckbox } from '..'
+import { FormCheckbox } from '../'
 import { i18n } from '../../i18n'
 
 const Link = Typography.Link

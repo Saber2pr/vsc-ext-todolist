@@ -29,6 +29,7 @@ import { KEY_TODO_TREE } from '../../../../src/constants'
 import {
   ItemOptions,
   OptionsBtnProps,
+  TodoLevels,
   useCreateItemMenu,
 } from '../../components/item-options'
 import { MdOptionModal } from '../../components/md-option-modal'
@@ -44,6 +45,7 @@ import {
   getArray,
   getTreeKeys,
   insertNodes,
+  sortTree,
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
@@ -89,7 +91,9 @@ export const PageTodoTree = () => {
   const [virtualMode, setVirtual] = useState<boolean>(false)
 
   // init
-  const loadSource = async () => {
+  const loadSource = async (
+    callback?: (tree: IStoreTodoTree['tree']) => IStoreTodoTree['tree']
+  ) => {
     setLoaded(false)
     const todo = await callService<Services, 'GetStore'>('GetStore', {
       key: KEY_TODO_TREE,
@@ -97,7 +101,7 @@ export const PageTodoTree = () => {
     })
     if (todo) {
       const val: IStoreTodoTree = todo
-      treeRef.current = getArray(val.tree)
+      treeRef.current = getArray(callback ? callback(val.tree) : val.tree)
       expandKeysRef.current = getArray(val.expandKeys)
       //settings
       val.add_mode && setMode(val.add_mode)
@@ -194,13 +198,11 @@ export const PageTodoTree = () => {
               todo.level = level
               updateTree()
             }}
-          >
-            <Select.Option value="danger">P0</Select.Option>
-            <Select.Option value="warning">P1</Select.Option>
-            <Select.Option value="success">P2</Select.Option>
-            <Select.Option value="default">P3</Select.Option>
-            <Select.Option value="secondary">P4</Select.Option>
-          </Select>
+            options={Object.keys(TodoLevels).map(level => ({
+              label: `P${TodoLevels[level]}`,
+              value: level,
+            }))}
+          />
           <Button
             size="small"
             type="text"
@@ -410,6 +412,10 @@ export const PageTodoTree = () => {
                 onUpdate={async () => {
                   await loadSource()
                   message.success(i18n.format('updateTip'))
+                }}
+                onSort={async () => {
+                  await loadSource(sortTree)
+                  message.success(i18n.format('sort_tip'))
                 }}
                 onCollapseAll={() => {
                   updateExpandKeys([], 'replace')

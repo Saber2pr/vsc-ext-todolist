@@ -13,6 +13,15 @@ import { cloneTree, getArray, TreeNode } from '../../utils'
 import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
+import { BaseType } from 'antd/lib/typography/Base'
+
+export const TodoLevels: Record<BaseType | 'default', number> = {
+  danger: 0,
+  warning: 1,
+  success: 2,
+  default: 3,
+  secondary: 4,
+}
 
 export interface OptionsBtnProps {
   node: TreeNode

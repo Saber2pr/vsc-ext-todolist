@@ -1,6 +1,7 @@
 import { DataNode } from 'antd/lib/tree'
 
 import { ITodoItem, ITodoTree } from '../../../src/api/type'
+import { TodoLevels } from '../components'
 
 export interface TreeNode extends DataNode {
   todo: ITodoItem
@@ -85,4 +86,41 @@ export const cloneTree = (tree: TreeNode[]) => {
     newNode.key = start + i
     return newNode
   })
+}
+
+export const sortTree = (treeNode: TreeNode[]) => {
+  if (!(treeNode?.length > 0)) return []
+  const nextTree: TreeNode[] = []
+
+  // sort
+  const treeNodeSorted = treeNode.slice().sort((a, b) => {
+    const todoA = a?.todo
+    const todoB = b?.todo
+    if (todoA && todoB) {
+      const aVal = TodoLevels[todoA.level] ?? 0
+      const bVal = TodoLevels[todoB.level] ?? 0
+      return aVal - bVal
+    }
+    return 0
+  })
+
+  // split
+  const newTreeNodeProcess: TreeNode[] = []
+  const newTreeNodeDone: TreeNode[] = []
+  for (const node of treeNodeSorted) {
+    if (node?.todo?.done) {
+      newTreeNodeDone.push(node)
+    } else {
+      newTreeNodeProcess.push(node)
+    }
+  }
+
+  // concat
+  const newTree = newTreeNodeProcess.concat(newTreeNodeDone)
+  for (const node of newTree) {
+    const newNode = { ...node }
+    newNode.children = sortTree(newNode.children)
+    nextTree.push(newNode)
+  }
+  return nextTree
 }

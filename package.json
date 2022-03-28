@@ -4,7 +4,7 @@
 	"description": "TodoList TreeView GUI.",
 	"publisher": "saber2pr",
 	"license": "MIT",
-	"version": "0.1.21",
+	"version": "0.1.22",
 	"engines": {
 		"vscode": "^1.56.0"
 	},

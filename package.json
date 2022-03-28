@@ -60,7 +60,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
-		"compile": "tsc -p ./",
+		"compile": "tsc -p ./ && cd web && yarn build",
 		"watch": "tsc -watch -p ./",
 		"build": "cd web && yarn build && cd .. && vsce package",
 		"release": "standard-version",

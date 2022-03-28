@@ -9,10 +9,16 @@ import React, { useEffect, useState } from 'react'
 
 import { FormCheckbox } from '../'
 import { i18n } from '../../i18n'
+import { SetDisplayFile } from './set-display-file'
 
 const Link = Typography.Link
 
+export interface Options {
+  currentFile: string
+}
+
 export interface SettingsProps {
+  options: Options
   visible?: boolean
   onCancel: VoidFunction
   onFinish: (values: FormValues) => Promise<void>
@@ -24,9 +30,11 @@ export interface SettingsProps {
 type FormValues = {
   add_mode: 'top' | 'bottom'
   virtual?: boolean
+  displayFile?: string
 }
 
 export const SettingsModal: React.FC<SettingsProps> = ({
+  options,
   visible,
   onCancel,
   onFinish,
@@ -89,6 +97,13 @@ export const SettingsModal: React.FC<SettingsProps> = ({
         >
           <FormCheckbox />
         </Form.Item>
+        <Form.Item
+          label={i18n.format('display_file')}
+          tooltip={i18n.format('display_file_tip')}
+          name="displayFile"
+        >
+          <SetDisplayFile {...options} />
+        </Form.Item>
       </Form>
       <Divider>{i18n.format('more_options')}</Divider>
       <Space split={<Divider type="vertical" />}>
@@ -108,6 +123,7 @@ export interface SettingsModalOps {
   onSaveAs: () => Promise<void>
   onParseMd: () => Promise<void>
   initValues: FormValues
+  options: Options
 }
 
 export const useSettingsModal = (ops: SettingsModalOps) => {
@@ -115,6 +131,7 @@ export const useSettingsModal = (ops: SettingsModalOps) => {
   return {
     modal: (
       <SettingsModal
+        options={ops.options}
         visible={visible}
         onCancel={() => setVisible(false)}
         onFinish={ops.onFinish}

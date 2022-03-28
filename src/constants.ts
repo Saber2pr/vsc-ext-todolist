@@ -1,4 +1,5 @@
-export const FILE_CONFIG = '.todolistrc'
+export const DATA_CONFIG = '.todolistrc_config'
+export const FILE_DEFAULT = '.todolistrc'
 export const FILE_TEMP = '.todolistrc_temp'
 export const COM_MAIN = 'todolist.main'
 export const KEY_TODO = 'todolist'

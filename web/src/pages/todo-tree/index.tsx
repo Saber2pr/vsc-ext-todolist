@@ -72,6 +72,7 @@ export const PageTodoTree = () => {
   }
 
   const treeRef = useRef<TreeNode[]>([])
+  const displayFileRef = useRef<string>(null)
 
   const updateTree = () => {
     const data = treeRef.current
@@ -95,6 +96,13 @@ export const PageTodoTree = () => {
     callback?: (tree: IStoreTodoTree['tree']) => IStoreTodoTree['tree']
   ) => {
     setLoaded(false)
+    // config
+    const displayFile = await callService<Services, 'GetDisplayFile'>(
+      'GetDisplayFile',
+      null
+    )
+    displayFileRef.current = displayFile
+    // load todo file
     const todo = await callService<Services, 'GetStore'>('GetStore', {
       key: KEY_TODO_TREE,
       path: params?.file,
@@ -307,7 +315,10 @@ export const PageTodoTree = () => {
     [treeRef.current]
   )
 
-  const TITLE = params?.name ?? 'Todo List'
+  let TITLE = params?.name ?? 'Todo List'
+  if (TITLE === '.todolistrc') {
+    TITLE = 'Todo List'
+  }
 
   // md modal
   const [showMdOptionsModal, setShowMdOptionsModal] = useState(false)
@@ -317,11 +328,23 @@ export const PageTodoTree = () => {
 
   // settings
   const { modal, setVisible } = useSettingsModal({
+    options: {
+      currentFile: params?.file,
+    },
     initValues: {
       add_mode: addMode,
       virtual: virtualMode,
+      displayFile: displayFileRef.current,
     },
     async onFinish(values) {
+      const isChangeDisplay = values?.displayFile !== displayFileRef.current
+      if (isChangeDisplay && values?.displayFile) {
+        await callService<Services, 'SetConfig'>('SetConfig', {
+          key: 'displayFile',
+          value: values?.displayFile,
+        })
+        await callService<Services, 'reload'>('reload', null)
+      }
       setMode(values?.add_mode)
       setVirtual(!!values?.virtual)
       message.success(i18n.format('settingTip'))

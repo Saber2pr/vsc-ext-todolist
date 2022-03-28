@@ -1,8 +1,8 @@
-import { join } from 'path'
+import { join, parse } from 'path'
 import * as vscode from 'vscode'
 
 import { calcProgressV2 } from './api/calc-progress'
-import { FILE_CONFIG_PATH, handleServiceMessage } from './api/services'
+import { handleServiceMessage, ServicesHandlers } from './api/services'
 import { IStoreTodoTree } from './api/type'
 import { COM_MAIN, KEY_TODO_TREE } from './constants'
 import { RCManager } from './store/rc'
@@ -19,13 +19,18 @@ let statusBar: vscode.StatusBarItem = null
 const displayName = 'Todo List'
 const loginWelcome = 'Check Todo List.'
 
-const updateStatusBarProgressV2 = async () => {
-  const listStr = await new RCManager(FILE_CONFIG_PATH).get(KEY_TODO_TREE)
+export const updateStatusBarProgressV2 = async () => {
+  const displayFile = await ServicesHandlers.GetDisplayFile(null)
+  const listStr = await new RCManager(displayFile).get(KEY_TODO_TREE)
   if (listStr) {
     const list: IStoreTodoTree = listStr
     const length = list.tree.length
     const percent = calcProgressV2(list.tree)
-    statusBar.text = length ? `Todo (${percent}%)` : displayName
+    let name = parse(displayFile).name
+    if (name === '.todolistrc') {
+      name = 'Todo'
+    }
+    statusBar.text = length ? `${name} (${percent}%)` : displayName
   }
 }
 
@@ -96,12 +101,19 @@ export function activate(context: vscode.ExtensionContext) {
   }
   // subscriptions
   context.subscriptions.push(
-    vscode.commands.registerCommand(COM_MAIN, () => {
-      activeProjectCreatorWebview({
-        theme: isActiveThemeKind(vscode.ColorThemeKind.Light)
-          ? 'light'
-          : 'dark',
-      })
+    vscode.commands.registerCommand(COM_MAIN, async (reload: string) => {
+      const file = await ServicesHandlers.GetDisplayFile(null)
+      const name = parse(file).name
+      activeProjectCreatorWebview(
+        {
+          theme: isActiveThemeKind(vscode.ColorThemeKind.Light)
+            ? 'light'
+            : 'dark',
+          file,
+          name,
+        },
+        reload === 'true'
+      )
     }),
     vscode.window.registerCustomEditorProvider(
       'todolist.edit',

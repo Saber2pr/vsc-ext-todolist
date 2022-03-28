@@ -49,6 +49,11 @@ export const localeMap = {
     save_file: 'File Saved',
     sort: 'Sort',
     sort_tip: 'Sort success',
+    display_file: 'StatusBar Display',
+    display_file_tip:
+      'Sets the file path associated with the bottom state progress',
+    display_file_set: 'Set',
+    display_file_reset: 'Reset',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -99,5 +104,9 @@ export const localeMap = {
     save_file: '文件保存成功',
     sort: '排序',
     sort_tip: '已自动排序',
+    display_file: '状态栏显示',
+    display_file_tip: '设置底部状态进度关联的文件路径',
+    display_file_set: '设置',
+    display_file_reset: '重置',
   },
 }

@@ -22,9 +22,18 @@ export type Services = {
   GetLanguage: Pair<any, any>
   SaveFile: Pair<{ title: string; path: string; content: string }, any>
   SaveFileAs: Pair<{ title: string; name: string; content: string }, any>
+  openFile: Pair<any, string>
+  reload: Pair<any, any>
   // temp
   SetTemp: Pair<{ key: string; value: any }, any>
   GetTemp: Pair<{ key: string }, any>
+  // config
+  SetConfig: Pair<{ key: keyof ITodoListConfig; value: any }, any>
+  GetConfig: Pair<{ key: keyof ITodoListConfig }, string>
+  GetDefaultFilePath: Pair<any, string>
+  // display
+  SetDisplayFile: Pair<string, any>
+  GetDisplayFile: Pair<any, string>
 }
 
 export type ITodoItem = {
@@ -43,3 +52,7 @@ export type ITodoTree = {
 }
 
 export type Key = string | number
+
+export interface ITodoListConfig {
+  displayFile: string
+}

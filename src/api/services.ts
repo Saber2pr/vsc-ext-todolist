@@ -1,26 +1,29 @@
+import { COM_MAIN, DATA_CONFIG } from './../constants'
 import { homedir } from 'os'
 import { join } from 'path'
 import * as vscode from 'vscode'
 
-import { createServiceHandler } from '@saber2pr/vscode-webview'
+import { createServiceHandler, HandleMap } from '@saber2pr/vscode-webview'
 
-import { FILE_CONFIG, FILE_TEMP } from '../constants'
+import { FILE_DEFAULT, FILE_TEMP } from '../constants'
 import { RCManager } from '../store/rc'
 import {
   saveWorkspaceFile,
   saveWorkspaceFileAs,
 } from '../utils/saveWorkspaceFile'
 import { Services } from './type'
+import { updateStatusBarProgressV2 } from '../extension'
 
-export const FILE_CONFIG_PATH = join(homedir(), FILE_CONFIG)
+export const DATA_CONFIG_PATH = join(homedir(), DATA_CONFIG)
+export const DEFAULT_FILE_PATH = join(homedir(), FILE_DEFAULT)
 export const FILE_TEMP_PATH = join(homedir(), FILE_TEMP)
 
-const handleServiceMessage = createServiceHandler<Services>({
-  GetStore: ({ key, path = FILE_CONFIG_PATH }) => {
+export const ServicesHandlers: HandleMap<Services, keyof Services> = {
+  GetStore: ({ key, path = DEFAULT_FILE_PATH }) => {
     const rc = new RCManager(path)
     return rc.get(key)
   },
-  Store: async ({ key, value, path = FILE_CONFIG_PATH }) => {
+  Store: async ({ key, value, path = DEFAULT_FILE_PATH }) => {
     const rc = new RCManager(path)
     await rc.set(key, value)
     return path
@@ -39,6 +42,39 @@ const handleServiceMessage = createServiceHandler<Services>({
     await rc.set(key, value)
     return FILE_TEMP_PATH
   },
-})
+  SetConfig: async ({ key, value }) => {
+    const rc = new RCManager(DATA_CONFIG_PATH)
+    await rc.set(key, value)
+    return DATA_CONFIG_PATH
+  },
+  GetConfig: async ({ key }) => {
+    const rc = new RCManager(DATA_CONFIG_PATH)
+    return rc.get(key)
+  },
+  GetDefaultFilePath: async () => DEFAULT_FILE_PATH,
+  async openFile() {
+    const uri = await vscode.window.showOpenDialog({
+      canSelectMany: false,
+      filters: {
+        TodoList: ['.todo', '.todolistrc'],
+      },
+    })
+    return uri?.[0].fsPath
+  },
+  SetDisplayFile: async file => {
+    const rc = new RCManager(DATA_CONFIG_PATH)
+    await rc.set('displayFile', file)
+    await updateStatusBarProgressV2()
+    return DATA_CONFIG_PATH
+  },
+  GetDisplayFile: async () => {
+    const rc = new RCManager(DATA_CONFIG_PATH)
+    const path = await rc.get('displayFile')
+    return path || DEFAULT_FILE_PATH
+  },
+  reload: async () => vscode.commands.executeCommand(COM_MAIN, 'true'),
+}
+
+const handleServiceMessage = createServiceHandler<Services>(ServicesHandlers)
 
 export { handleServiceMessage }

@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.ViewColumn.One,
         {
           enableScripts: true,
-          retainContextWhenHidden: false,
+          retainContextWhenHidden: true,
         }
       )
       webviewPanel.iconPath = vscode.Uri.file(

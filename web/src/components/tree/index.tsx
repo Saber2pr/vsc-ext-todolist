@@ -7,6 +7,7 @@ import { findNode, getArray, treeDrop, TreeNode } from '../../utils'
 import keycode from 'keycode'
 
 export interface TodoTreeProps {
+  showLine?: boolean
   virtualMode: boolean
   titleRender: (node: DataNode) => React.ReactNode
   expandedKeys: Key[]
@@ -18,6 +19,7 @@ export interface TodoTreeProps {
 }
 
 export const TodoTree: React.FC<TodoTreeProps> = ({
+  showLine,
   virtualMode,
   titleRender,
   expandedKeys,
@@ -52,8 +54,9 @@ export const TodoTree: React.FC<TodoTreeProps> = ({
       titleRender={titleRender}
       expandedKeys={expandedKeys}
       onExpand={onExpand}
-      draggable
+      draggable={{ icon: false }}
       blockNode
+      showLine={showLine}
       onDrop={treeDrop(treeData, handleDrop)}
       treeData={treeData}
       onRightClick={({ node }) => {

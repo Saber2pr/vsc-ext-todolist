@@ -92,6 +92,7 @@ export const PageTodoTree = () => {
   // settings
   const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
   const [virtualMode, setVirtual] = useState<boolean>(false)
+  const [showLine, setShowLine] = useState<boolean>(false)
 
   // init
   const loadSource = async (
@@ -116,6 +117,7 @@ export const PageTodoTree = () => {
       //settings
       val.add_mode && setMode(val.add_mode)
       setVirtual(!!val.virtual)
+      setShowLine(!!val.showLine)
       forceUpdate()
     }
     setLoaded(true)
@@ -291,6 +293,7 @@ export const PageTodoTree = () => {
         'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3',
       add_mode: addMode,
       virtual: virtualMode,
+      showLine: showLine,
     }
     const tree = JSON.parse(JSON.stringify(storeVal))
     await callService<Services, 'Store'>('Store', {
@@ -320,7 +323,14 @@ export const PageTodoTree = () => {
     if (loaded) {
       isMounted.current = true
     }
-  }, [loaded, treeRef.current, expandKeysRef.current, addMode, virtualMode])
+  }, [
+    loaded,
+    treeRef.current,
+    expandKeysRef.current,
+    addMode,
+    virtualMode,
+    showLine,
+  ])
 
   const percent = useMemo(
     () => calcProgressV2(treeRef.current),
@@ -347,6 +357,7 @@ export const PageTodoTree = () => {
       add_mode: addMode,
       virtual: virtualMode,
       displayFile: displayFileRef.current,
+      showLine,
     },
     async onFinish(values) {
       const isChangeDisplay = values?.displayFile !== displayFileRef.current
@@ -359,6 +370,7 @@ export const PageTodoTree = () => {
       }
       setMode(values?.add_mode)
       setVirtual(!!values?.virtual)
+      setShowLine(!!values?.showLine)
       message.success(i18n.format('settingTip'))
       setVisible(false)
     },
@@ -387,6 +399,7 @@ export const PageTodoTree = () => {
           <Spin spinning={!loaded} tip={i18n.format('loading')}>
             {todoTreeLength > 0 ? (
               <TodoTree
+                showLine={showLine}
                 virtualMode={virtualMode}
                 titleRender={(node: TreeNode) => <Item node={node} />}
                 expandedKeys={expandKeysRef.current}

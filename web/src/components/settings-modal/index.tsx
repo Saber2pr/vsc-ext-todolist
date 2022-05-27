@@ -32,6 +32,7 @@ type FormValues = {
   add_mode: 'top' | 'bottom'
   virtual?: boolean
   displayFile?: string
+  showLine?: boolean
 }
 
 export const SettingsModal: React.FC<SettingsProps> = ({
@@ -104,6 +105,9 @@ export const SettingsModal: React.FC<SettingsProps> = ({
           name="displayFile"
         >
           <SetDisplayFile {...options} />
+        </Form.Item>
+        <Form.Item label={i18n.format('showLine')} name="showLine">
+          <FormCheckbox />
         </Form.Item>
       </Form>
       <Divider>{i18n.format('more_options')}</Divider>

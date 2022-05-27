@@ -55,6 +55,7 @@ export const localeMap = {
     display_file_set: 'Set',
     display_file_reset: 'Reset',
     keybind: 'Shortcuts',
+    showLine: 'Show Line',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -110,5 +111,6 @@ export const localeMap = {
     display_file_set: '设置',
     display_file_reset: '重置',
     keybind: '快捷键',
+    showLine: '显示连接线',
   },
 }

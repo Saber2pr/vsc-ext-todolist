@@ -6,6 +6,7 @@ export type IStoreTodoTree = {
   schema: 'https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3'
   add_mode: 'top' | 'bottom'
   virtual?: boolean
+  showLine?: boolean
 }
 
 // service type define

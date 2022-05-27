@@ -1,4 +1,4 @@
-import Checkbox from 'antd/lib/checkbox'
+import { Checkbox } from 'antd'
 import React, { ReactNode } from 'react'
 
 export const FormCheckbox = ({
@@ -13,7 +13,7 @@ export const FormCheckbox = ({
   return (
     <Checkbox
       checked={value}
-      onChange={event => onChange(event?.target?.checked)}
+      onChange={(event) => onChange(event?.target?.checked)}
     >
       {children}
     </Checkbox>

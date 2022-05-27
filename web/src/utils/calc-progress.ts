@@ -1,4 +1,4 @@
-import type { ITodoTree } from './type'
+import type { ITodoTree } from '../../../src/api/type'
 
 export const calcProgressV2 = (todos: ITodoTree[]) => {
   let sum = 0

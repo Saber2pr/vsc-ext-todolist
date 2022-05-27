@@ -1,4 +1,4 @@
-import { Pair } from '@saber2pr/vscode-webview'
+import type { Pair } from '@saber2pr/vscode-webview'
 
 export type IStoreTodoTree = {
   tree: ITodoTree[]

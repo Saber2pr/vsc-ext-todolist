@@ -3,9 +3,26 @@
     "target": "es5",
     "module": "commonjs",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "jsx": "react",
-    "lib": ["dom", "es2015"],
-    "outDir": "lib"
+    "lib": ["dom", "es2015", "esnext"],
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "charset": "utf8",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "skipDefaultLibCheck": true,
+    "typeRoots": ["./node_modules/@types/", "./@types/"],
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules"]
 }

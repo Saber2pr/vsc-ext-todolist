@@ -2,9 +2,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
+const webpack = require('webpack')
+const webpackDevServer = require('webpack-dev-server')
+
 const publicPath = (resourcePath, context) =>
   path.relative(path.dirname(resourcePath), context) + '/'
 
+/**
+ * @type {webpack.Configuration}
+ */
 module.exports = {
   entry: {
     app: './src/index.tsx',
@@ -16,29 +22,26 @@ module.exports = {
     filename: '[name].min.js',
     path: path.join(__dirname, 'build'),
   },
-  devServer: { writeToDisk: true },
+  /**
+   * @type {webpackDevServer.Configuration}
+   */
+  devServer: {
+    devMiddleware: {
+      writeToDisk: true,
+    },
+  },
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        use: ['ts-loader'],
+        test: /\.(js|jsx|ts|tsx)$/,
+        use: ['babel-loader'],
       },
       {
         test: /\.(woff|svg|eot|ttf|png)$/,
         use: ['url-loader'],
       },
       {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: { publicPath },
-          },
-          'css-loader',
-        ],
-      },
-      {
-        test: /\.less$/,
+        test: /\.(css|less)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -57,11 +60,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html'),
+      template: path.join(__dirname, 'template.html'),
     }),
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
     }),
+    new webpack.ProgressPlugin(),
   ],
   watchOptions: {
     aggregateTimeout: 1000,

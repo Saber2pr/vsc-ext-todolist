@@ -27,6 +27,7 @@ import { calcProgressV2 } from '../../../../src/api/calc-progress'
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import {
+  copyNode,
   ItemOptions,
   OptionsBtnProps,
   TodoLevels,
@@ -41,6 +42,7 @@ import { i18n } from '../../i18n'
 import {
   appendNodes,
   clearDoneNode,
+  cloneTree,
   compileMd,
   getArray,
   getTreeKeys,
@@ -123,6 +125,43 @@ export const PageTodoTree = () => {
     loadSource()
   }, [])
 
+  const deleteNode = (node: TreeNode) => {
+    Modal.confirm({
+      title: i18n.format('removeItemTip'),
+      content: node.todo.content,
+      okText: i18n.format('confirm'),
+      cancelText: i18n.format('cancel'),
+      onOk: () => {
+        node.todo.pendingDelete = true
+        treeRef.current = clearDoneNode(
+          treeRef.current,
+          node => node.todo.pendingDelete
+        )
+        updateTree()
+      },
+    })
+  }
+
+  const createNewNode = (node: TreeNode) => {
+    createNode(() => node.children)
+    updateTree()
+    updateExpandKeys([node.key], 'push')
+  }
+
+  const pasteNode = async (node: TreeNode) => {
+    const temp: TreeNode[] = await callService<Services, 'GetTemp'>('GetTemp', {
+      key: KEY_TODO_TREE,
+    })
+    const tree = cloneTree(temp)
+    if (addMode === 'top') {
+      insertNodes(node.children, ...tree)
+    } else {
+      appendNodes(node.children, ...tree)
+    }
+    updateTree()
+    updateExpandKeys([node.key], 'push')
+  }
+
   const Item = ({ node }: { node: TreeNode }) => {
     const [_, setState] = useState({})
     useEffect(() => {
@@ -138,15 +177,7 @@ export const PageTodoTree = () => {
 
     const itemOptions: OptionsBtnProps = {
       node,
-      onPaste: tree => {
-        if (addMode === 'top') {
-          insertNodes(node.children, ...tree)
-        } else {
-          appendNodes(node.children, ...tree)
-        }
-        updateTree()
-        updateExpandKeys([node.key], 'push')
-      },
+      onPaste: pasteNode,
       onAddLink: link => {
         todo.link = link
         updateTree()
@@ -162,22 +193,7 @@ export const PageTodoTree = () => {
         const keys = getTreeKeys(node)
         updateExpandKeys(keys, 'push')
       },
-      onDelete: () => {
-        Modal.confirm({
-          title: i18n.format('removeItemTip'),
-          content: node.todo.content,
-          okText: i18n.format('confirm'),
-          cancelText: i18n.format('cancel'),
-          onOk: () => {
-            todo.pendingDelete = true
-            treeRef.current = clearDoneNode(
-              treeRef.current,
-              node => node.todo.pendingDelete
-            )
-            updateTree()
-          },
-        })
-      },
+      onDelete: () => deleteNode(node),
     }
     const itemMenu = useCreateItemMenu(itemOptions)
 
@@ -215,11 +231,7 @@ export const PageTodoTree = () => {
             size="small"
             type="text"
             icon={<PlusOutlined />}
-            onClick={() => {
-              createNode(() => node.children)
-              updateTree()
-              updateExpandKeys([node.key], 'push')
-            }}
+            onClick={() => createNewNode(node)}
           />
           <Button
             size="small"
@@ -382,6 +394,23 @@ export const PageTodoTree = () => {
                 handleDrop={data => {
                   treeRef.current = data
                   updateTree()
+                }}
+                onKeydown={(key, node, event) => {
+                  if (key === 'enter' || key === 'tab') {
+                    createNewNode(node)
+                  }
+                  if (key === 'backspace' || key === 'delete') {
+                    deleteNode(node)
+                  }
+                  const ctrl = event.ctrlKey || event.metaKey
+                  if (ctrl) {
+                    if (key === 'c' || key === 'C') {
+                      copyNode(node)
+                    }
+                    if (key === 'v' || key === 'V') {
+                      pasteNode(node)
+                    }
+                  }
                 }}
                 treeData={treeRef.current}
                 itemOptions={null}

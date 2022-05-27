@@ -45,6 +45,10 @@ extra todo file support:
 
 ## New Features
 
+> 2022-05-27 v0.1.24
+
+1. Shortcuts: see Settings > Shortcuts
+
 > 2022-02-01 v0.1.16
 
 1. Add Mode

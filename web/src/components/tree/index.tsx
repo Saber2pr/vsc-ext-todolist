@@ -1,9 +1,10 @@
 import Tree, { DataNode } from 'antd/lib/tree'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { OptionsBtnProps } from '../'
 import { Key } from '../../../../src/api/type'
-import { treeDrop, TreeNode } from '../../utils'
+import { findNode, getArray, treeDrop, TreeNode } from '../../utils'
+import keycode from 'keycode'
 
 export interface TodoTreeProps {
   virtualMode: boolean
@@ -13,6 +14,7 @@ export interface TodoTreeProps {
   treeData: TreeNode[]
   handleDrop: (newTree: TreeNode[]) => void
   itemOptions: OptionsBtnProps
+  onKeydown?(key: string, node: TreeNode, event: KeyboardEvent): void
 }
 
 export const TodoTree: React.FC<TodoTreeProps> = ({
@@ -23,8 +25,25 @@ export const TodoTree: React.FC<TodoTreeProps> = ({
   treeData,
   handleDrop,
   itemOptions,
+  onKeydown,
 }) => {
   const [selectedKeys, setSelectedKeys] = useState([])
+
+  useEffect(() => {
+    if (!onKeydown) return
+    const onKeydownHandle = (event: KeyboardEvent) => {
+      const key = getArray(selectedKeys)[0]
+      if (key) {
+        const node = findNode(getArray(treeData), key)
+        if (node) {
+          if (node.todo.editing) return
+          onKeydown(keycode(event), node, event)
+        }
+      }
+    }
+    document.addEventListener('keydown', onKeydownHandle)
+    return () => document.removeEventListener('keydown', onKeydownHandle)
+  }, [treeData, selectedKeys])
 
   return (
     <Tree

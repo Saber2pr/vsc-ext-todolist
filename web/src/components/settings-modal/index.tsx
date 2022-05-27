@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 
 import { FormCheckbox } from '../'
 import { i18n } from '../../i18n'
+import { Keybind } from './keybind'
 import { SetDisplayFile } from './set-display-file'
 
 const Link = Typography.Link
@@ -112,6 +113,19 @@ export const SettingsModal: React.FC<SettingsProps> = ({
         </Button>
         <Button type="text" onClick={onParseMd}>
           {i18n.format('parsemd')}
+        </Button>
+        <Button
+          type="text"
+          onClick={() =>
+            Modal.confirm({
+              title: i18n.format('keybind'),
+              content: <Keybind />,
+              okText: i18n.format('confirm'),
+              cancelButtonProps: { hidden: true },
+            })
+          }
+        >
+          {i18n.format('keybind')}
         </Button>
       </Space>
     </Modal>

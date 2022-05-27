@@ -2,6 +2,7 @@ import Button from 'antd/lib/button'
 import Dropdown from 'antd/lib/dropdown'
 import Menu from 'antd/lib/menu'
 import message from 'antd/lib/message'
+import { BaseType } from 'antd/lib/typography/Base'
 import React from 'react'
 
 import MoreOutlined from '@ant-design/icons/MoreOutlined'
@@ -9,12 +10,10 @@ import { callService } from '@saber2pr/vscode-webview'
 
 import { KEY_TODO_TREE } from '../../../../src/constants'
 import { i18n } from '../../i18n'
-import { cloneTree, getArray, TreeNode } from '../../utils'
+import { TreeNode } from '../../utils'
 import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
-import { BaseType } from 'antd/lib/typography/Base'
-
 export const TodoLevels: Record<BaseType | 'default', number> = {
   danger: 0,
   warning: 1,
@@ -25,12 +24,20 @@ export const TodoLevels: Record<BaseType | 'default', number> = {
 
 export interface OptionsBtnProps {
   node: TreeNode
-  onPaste: (tree: TreeNode[]) => void
+  onPaste: (node: TreeNode) => void
   onAddLink: (link: string) => void
   onExpandAll: (node: TreeNode) => void
   onDelete: (node: TreeNode) => void
   onCollapseAll: (node: TreeNode) => void
   menuOnly?: boolean
+}
+
+export const copyNode = async (node: TreeNode) => {
+  await callService<Services, 'SetTemp'>('SetTemp', {
+    key: KEY_TODO_TREE,
+    value: JSON.parse(JSON.stringify([node])),
+  })
+  message.success(i18n.format('copy_success'))
 }
 
 export const useCreateItemMenu = ({
@@ -59,28 +66,10 @@ export const useCreateItemMenu = ({
       <Menu.Item onClick={() => onDelete(node)}>
         {i18n.format('delete')}
       </Menu.Item>
-      <Menu.Item
-        onClick={async () => {
-          await callService<Services, 'SetTemp'>('SetTemp', {
-            key: KEY_TODO_TREE,
-            value: JSON.parse(JSON.stringify([node])),
-          })
-          message.success(i18n.format('copy_success'))
-        }}
-      >
+      <Menu.Item onClick={() => copyNode(node)}>
         {i18n.format('copy')}
       </Menu.Item>
-      <Menu.Item
-        onClick={async () => {
-          const tree: TreeNode[] = await callService<Services, 'GetTemp'>(
-            'GetTemp',
-            {
-              key: KEY_TODO_TREE,
-            }
-          )
-          onPaste(cloneTree(getArray(tree)))
-        }}
-      >
+      <Menu.Item onClick={() => onPaste(node)}>
         {i18n.format('paste')}
       </Menu.Item>
       <Menu.Item

@@ -11,6 +11,7 @@ export interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
   const [editing, setEditing] = useState(false)
+  todo.editing = editing
   return (
     <Text
       delete={todo.done}

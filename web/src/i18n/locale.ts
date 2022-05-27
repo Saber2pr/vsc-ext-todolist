@@ -54,6 +54,7 @@ export const localeMap = {
       'Sets the file path associated with the bottom state progress',
     display_file_set: 'Set',
     display_file_reset: 'Reset',
+    keybind: 'Shortcuts',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -108,5 +109,6 @@ export const localeMap = {
     display_file_tip: '设置底部状态进度关联的文件路径',
     display_file_set: '设置',
     display_file_reset: '重置',
+    keybind: '快捷键',
   },
 }

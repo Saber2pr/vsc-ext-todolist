@@ -20,9 +20,11 @@ export const getTreeKeys = (...tree: TreeNode[]) => {
 
 export const findNode = (treeNode: TreeNode[], key: number): TreeNode => {
   if (!(treeNode?.length > 0)) return
-  for (const node of treeNode) {
+  const stack = Array.isArray(treeNode) ? treeNode.slice() : []
+  while (stack.length) {
+    const node = stack.pop()
     if (node.key === key) return node
-    return findNode(node.children, key)
+    stack.push(...node.children)
   }
 }
 

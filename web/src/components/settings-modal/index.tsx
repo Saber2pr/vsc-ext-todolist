@@ -123,6 +123,7 @@ export const SettingsModal: React.FC<SettingsProps> = ({
           onClick={() =>
             Modal.confirm({
               title: i18n.format('keybind'),
+              width: 500,
               content: <Keybind />,
               okText: i18n.format('confirm'),
               cancelButtonProps: { hidden: true },

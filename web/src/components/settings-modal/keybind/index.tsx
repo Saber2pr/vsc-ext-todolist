@@ -7,8 +7,9 @@ export interface KeybindProps {}
 export const Keybind: React.FC<KeybindProps> = ({}) => {
   return (
     <Descriptions bordered column={1}>
-      <Descriptions.Item label={i18n.format('newItem')}>
-        Tab or Enter
+      <Descriptions.Item label={i18n.format('newItem')}>Tab</Descriptions.Item>
+      <Descriptions.Item label={i18n.format('newItem_sibling')}>
+        Enter
       </Descriptions.Item>
       <Descriptions.Item label={i18n.format('delete')}>
         Backspace or Delete

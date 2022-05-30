@@ -43,9 +43,11 @@ import {
   clearDoneNode,
   cloneTree,
   compileMd,
+  findNodeParent,
   getArray,
   getTreeKeys,
   insertNodes,
+  insertNodeSibling,
   sortTree,
   TreeNode,
 } from '../../utils'
@@ -128,6 +130,7 @@ export const PageTodoTree = () => {
   }, [])
 
   const deleteNode = (node: TreeNode) => {
+    node.todo.editing = true
     Modal.confirm({
       title: i18n.format('removeItemTip'),
       content: node.todo.content,
@@ -141,11 +144,14 @@ export const PageTodoTree = () => {
         )
         updateTree()
       },
+      onCancel() {
+        node.todo.editing = false
+      },
     })
   }
 
-  const createNewNode = (node: TreeNode) => {
-    createNode(() => node.children)
+  const createNewNode = (node: TreeNode, anchor?: TreeNode) => {
+    createNode(() => node.children, anchor)
     updateTree()
     updateExpandKeys([node.key], 'push')
   }
@@ -162,6 +168,16 @@ export const PageTodoTree = () => {
     }
     updateTree()
     updateExpandKeys([node.key], 'push')
+  }
+
+  const addSiblingNode = (node: TreeNode) => {
+    const parent = findNodeParent(treeRef.current, node.key)
+    if (parent) {
+      createNewNode(parent, node)
+    } else {
+      createNode(() => treeRef.current, node)
+      updateTree()
+    }
   }
 
   const Item = ({ node }: { node: TreeNode }) => {
@@ -259,7 +275,7 @@ export const PageTodoTree = () => {
     )
   }
 
-  const createNode = (getContainer: () => TreeNode[]) => {
+  const createNode = (getContainer: () => TreeNode[], anchor?: TreeNode) => {
     const key = Date.now()
 
     const node: TreeNode = {
@@ -277,10 +293,20 @@ export const PageTodoTree = () => {
         todo: node.todo,
       }),
     }
-    if (addMode === 'top') {
-      insertNodes(getContainer(), node)
+
+    if (anchor) {
+      insertNodeSibling(
+        getContainer(),
+        anchor.key,
+        node,
+        addMode === 'bottom' ? 'after' : 'before',
+      )
     } else {
-      appendNodes(getContainer(), node)
+      if (addMode === 'top') {
+        insertNodes(getContainer(), node)
+      } else {
+        appendNodes(getContainer(), node)
+      }
     }
   }
 
@@ -409,8 +435,11 @@ export const PageTodoTree = () => {
                   updateTree()
                 }}
                 onKeydown={(key, node, event) => {
-                  if (key === 'enter' || key === 'tab') {
+                  if (key === 'tab') {
                     createNewNode(node)
+                  }
+                  if (key === 'enter') {
+                    addSiblingNode(node)
                   }
                   if (key === 'backspace' || key === 'delete') {
                     deleteNode(node)

@@ -36,12 +36,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
                 globalState.blockKeyboard = false
               },
               onChange: (value) => {
+                globalState.blockKeyboard = false
                 if (todo.content !== value) {
                   todo.content = value
-                  globalState.blockKeyboard = true
                   onChange()
                 } else {
-                  globalState.blockKeyboard = false
                   setEditing(false)
                 }
               },

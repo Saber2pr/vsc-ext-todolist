@@ -5,6 +5,7 @@ import { OptionsBtnProps } from '../'
 import { Key } from '../../../../src/api/type'
 import { findNode, getArray, treeDrop, TreeNode } from '../../utils'
 import keycode from 'keycode'
+import { globalState } from '@/state'
 
 export interface TodoTreeProps {
   showLine?: boolean
@@ -38,7 +39,7 @@ export const TodoTree: React.FC<TodoTreeProps> = ({
       if (key) {
         const node = findNode(getArray(treeData), key)
         if (node) {
-          if (node.todo.editing) return
+          if (globalState.blockKeyboard) return
           onKeydown(keycode(event), node, event)
         }
       }

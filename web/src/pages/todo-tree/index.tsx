@@ -53,6 +53,7 @@ import {
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { calcProgressV2 } from '@/utils/calc-progress'
+import { globalState } from '@/state'
 
 const { Title } = Typography
 
@@ -130,7 +131,7 @@ export const PageTodoTree = () => {
   }, [])
 
   const deleteNode = (node: TreeNode) => {
-    node.todo.editing = true
+    globalState.blockKeyboard = true
     Modal.confirm({
       title: i18n.format('removeItemTip'),
       content: node.todo.content,
@@ -143,9 +144,10 @@ export const PageTodoTree = () => {
           (node) => node.todo.pendingDelete,
         )
         updateTree()
+        globalState.blockKeyboard = false
       },
       onCancel() {
-        node.todo.editing = false
+        globalState.blockKeyboard = false
       },
     })
   }

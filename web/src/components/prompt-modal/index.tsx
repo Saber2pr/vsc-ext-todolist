@@ -33,7 +33,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
       onCancel={onCancel}
       maskClosable={false}
     >
-      <Form form={form} onFinish={values => onOk(values?.value)}>
+      <Form form={form} onFinish={(values) => onOk(values?.value)}>
         <Form.Item name="value" initialValue={value}>
           <Input placeholder={placeholder} allowClear />
         </Form.Item>
@@ -47,6 +47,7 @@ export interface UsePromptModalOps {
   value?: string
   placeholder?: string
   onOk: (value: string) => void
+  onCancel: VoidFunction
 }
 
 export const usePromptModal = (ops: UsePromptModalOps) => {
@@ -55,7 +56,10 @@ export const usePromptModal = (ops: UsePromptModalOps) => {
     modal: (
       <PromptModal
         visible={visible}
-        onCancel={() => setVisible(false)}
+        onCancel={() => {
+          setVisible(false)
+          ops.onCancel && ops.onCancel()
+        }}
         onOk={ops.onOk}
         title={ops.title}
         value={ops.value}

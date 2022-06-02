@@ -14,6 +14,7 @@ import { TreeNode } from '../../utils'
 import { usePromptModal } from '../prompt-modal'
 
 import type { Services } from '../../../../src/api/type'
+import { globalState } from '@/state'
 export const TodoLevels: Record<BaseType | 'default', number> = {
   danger: 0,
   warning: 1,
@@ -49,10 +50,16 @@ export const useCreateItemMenu = ({
   onDelete,
 }: OptionsBtnProps) => {
   const { modal, setVisible } = usePromptModal({
-    onOk: onAddLink,
+    onOk: (value) => {
+      onAddLink(value)
+      globalState.blockKeyboard = false
+    },
     placeholder: i18n.format('add_link_holder'),
     title: i18n.format('add_link'),
     value: node?.todo?.link,
+    onCancel: () => {
+      globalState.blockKeyboard = false
+    },
   })
 
   return (
@@ -74,6 +81,7 @@ export const useCreateItemMenu = ({
       </Menu.Item>
       <Menu.Item
         onClick={() => {
+          globalState.blockKeyboard = true
           setVisible(true)
         }}
       >
@@ -83,7 +91,7 @@ export const useCreateItemMenu = ({
     </Menu>
   )
 }
-export const ItemOptions: React.FC<OptionsBtnProps> = props => {
+export const ItemOptions: React.FC<OptionsBtnProps> = (props) => {
   const menu = useCreateItemMenu(props)
   return (
     <Dropdown trigger={['click']} overlay={menu}>

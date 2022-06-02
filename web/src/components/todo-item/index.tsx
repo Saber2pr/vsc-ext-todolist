@@ -1,3 +1,4 @@
+import { globalState } from '@/state'
 import Typography from 'antd/lib/typography'
 import React, { useState } from 'react'
 
@@ -11,7 +12,6 @@ export interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
   const [editing, setEditing] = useState(false)
-  todo.editing = editing
   return (
     <Text
       delete={todo.done}
@@ -25,18 +25,23 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
               editing: editing,
               onStart() {
                 setEditing(true)
+                globalState.blockKeyboard = true
               },
               onEnd() {
                 setEditing(false)
+                globalState.blockKeyboard = false
               },
               onCancel() {
                 setEditing(false)
+                globalState.blockKeyboard = false
               },
-              onChange: value => {
+              onChange: (value) => {
                 if (todo.content !== value) {
                   todo.content = value
+                  globalState.blockKeyboard = true
                   onChange()
                 } else {
+                  globalState.blockKeyboard = false
                   setEditing(false)
                 }
               },

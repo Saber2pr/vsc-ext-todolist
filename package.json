@@ -1,7 +1,7 @@
 {
 	"name": "todolist",
 	"displayName": "Todo List",
-	"description": "TodoList TreeView GUI.",
+	"description": "TodoList TreeView Editor.",
 	"publisher": "saber2pr",
 	"license": "MIT",
 	"version": "0.1.29",

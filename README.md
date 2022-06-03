@@ -6,23 +6,23 @@
 
 [![Version for VS Code Extension](https://vsmarketplacebadge.apphb.com/version-short/saber2pr.todolist.svg?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=saber2pr.todolist) [![Installs](https://vsmarketplacebadge.apphb.com/installs/saber2pr.todolist.svg)](https://marketplace.visualstudio.com/items?itemName=saber2pr.todolist) [![Rating](https://vsmarketplacebadge.apphb.com/rating/saber2pr.todolist.svg)](https://marketplace.visualstudio.com/items?itemName=saber2pr.todolist)
 
-TodoList TreeView GUI. Check your todo list with a `TreeView GUI` !
+TodoList TreeView Editor. Check your todo list with a `TreeView` !
 
 Show Todo `Progress%` in a StatusBar:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-ext-todolist-bar.png)
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/0603vsc-todolist-progress.png)
 
 ## Overview
 
-Click the StatusBar or By Command Palette `todolist.main`:
+Create and edit `*.todo` file:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3.gif)
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/0603vsc-todolist-p1.gif)
 
 ---
 
-Support `*.todo` files Edit!:
+Shotcuts:
 
-![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3-view.gif)
+<image width="500px" src="https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/0603vsc-todolist-p0.png" />
 
 ---
 
@@ -32,32 +32,13 @@ Support `Color Theme` with current setting:
 
 ## Usage
 
-default todo (~/.todolistrc):
+- Click the `Todo` StatusBar at the bottom left.
 
-- Click the `Todo StatusBar` at bottom left.
-- `Ctrl+Shift+P` or `Command+Shift+P`, Execute command `todolist.main`
+Extra todo-file support:
 
-extra todo file support:
+- Edit `*.todo` files in the Todo editor!
 
-- Edit `*.todo`, `.todolistrc` files in the Todo editor!
-
-> tip: It is recommended to use Git to manage historical versions of todo files.
-
-## New Features
-
-> 2022-05-27 v0.1.24
-
-1. Shortcuts: see Settings > Shortcuts
-
-> 2022-02-01 v0.1.16
-
-1. Add Mode
-2. Virtual Scrolling
-3. Copy & Paste
-4. Edit Link
-
-<img width="40%" src="https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todolist-settings-view.webp" />
-<img width="20%" src="https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todolist-ops-view.webp" />
+> Tip: It is recommended to use Git to manage historical versions of todo files.
 
 ## More
 

@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.30](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.20...v0.1.30) (2022-06-03)
+
+
+### Features
+
+* change display progress file ([8f94528](https://github.com/Saber2pr/vsc-ext-todolist/commit/8f945285a2ec404cf92e1775b20bafe8736cbe16))
+* press enter add sibling node ([2ff3e2d](https://github.com/Saber2pr/vsc-ext-todolist/commit/2ff3e2dd885983d392e04021049e64b018f00116))
+* Shortcuts ([7bdbf98](https://github.com/Saber2pr/vsc-ext-todolist/commit/7bdbf98f49f8ed35512694a7d2344fd628de298c))
+* showLine ([e9e26ae](https://github.com/Saber2pr/vsc-ext-todolist/commit/e9e26aedc2037c09264ee9201d5b88aa3d76b08d))
+* update readme ([69701f1](https://github.com/Saber2pr/vsc-ext-todolist/commit/69701f1d07750b68e0245f147cde466987012796))
+
+
+### Bug Fixes
+
+* keyboard noworking after edit link ([36ea4d4](https://github.com/Saber2pr/vsc-ext-todolist/commit/36ea4d4524311b0c3f888aecc8ae37fdacb87965))
+* retainContextWhenHidden true ([793af49](https://github.com/Saber2pr/vsc-ext-todolist/commit/793af49ba227c753afabc66751ee8e911708928b))
+* todo edit close keyboard noworking ([7b14cc1](https://github.com/Saber2pr/vsc-ext-todolist/commit/7b14cc15a86eb29b04e5c836c74152f787ec24f5))
+
 ### [0.1.29](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.28...v0.1.29) (2022-06-02)
 
 

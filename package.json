@@ -65,7 +65,8 @@
 		"build": "cd web && yarn build && cd .. && vsce package",
 		"release": "standard-version",
 		"lint": "prettier --write ./src",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"dev": "cd web && yarn dev"
 	},
 	"devDependencies": {
 		"@types/node": "^12.11.7",

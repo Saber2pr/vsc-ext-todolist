@@ -1,22 +1,24 @@
 import './style.less'
 import 'nprogress/nprogress.css'
 
-import Affix from 'antd/lib/affix'
-import Button from 'antd/lib/button'
-import Divider from 'antd/lib/divider'
-import Dropdown from 'antd/lib/dropdown'
-import Empty from 'antd/lib/empty'
-import message from 'antd/lib/message'
-import Modal from 'antd/lib/modal'
-import Popconfirm from 'antd/lib/popconfirm'
-import Progress from 'antd/lib/progress'
-import Select from 'antd/lib/select'
-import Space from 'antd/lib/space'
-import Spin from 'antd/lib/spin'
-import Typography from 'antd/lib/typography'
+import {
+  Affix,
+  Button,
+  Divider,
+  Dropdown,
+  Empty,
+  message,
+  Modal,
+  Popconfirm,
+  Progress,
+  Select,
+  Space,
+  Spin,
+  Typography,
+} from 'antd'
 import nprogress from 'nprogress'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 
 import CheckOutlined from '@ant-design/icons/CheckOutlined'
 import PlusOutlined from '@ant-design/icons/PlusOutlined'
@@ -40,6 +42,7 @@ import { ViewOptions } from '../../components/view-options'
 import { i18n } from '../../i18n'
 import {
   appendNodes,
+  APP_ARGS,
   clearDoneNode,
   cloneTree,
   compileMd,
@@ -54,6 +57,7 @@ import {
 import { parseUrlParam } from '../../utils/parseUrlParam'
 import { calcProgressV2 } from '@/utils/calc-progress'
 import { globalState } from '@/state'
+import { DEFAULT_PLAYFONTSIZE } from '@/components/words-inputing'
 
 const { Title } = Typography
 
@@ -90,12 +94,14 @@ export const PageTodoTree = () => {
 
   const location = useLocation()
   const params = location?.search ? parseUrlParam(location.search) : {}
+  const history = useHistory()
 
   const [loaded, setLoaded] = useState(false)
   // settings
   const [addMode, setMode] = useState<'top' | 'bottom'>('bottom')
   const [virtualMode, setVirtual] = useState<boolean>(false)
   const [showLine, setShowLine] = useState<boolean>(false)
+  const [playFontSize, setPlayFontSize] = useState<number>(0)
 
   // init
   const loadSource = async (
@@ -121,6 +127,7 @@ export const PageTodoTree = () => {
       val.add_mode && setMode(val.add_mode)
       setVirtual(!!val.virtual)
       setShowLine(!!val.showLine)
+      setPlayFontSize(val.playFontSize || DEFAULT_PLAYFONTSIZE)
       forceUpdate()
     }
     setLoaded(true)
@@ -322,6 +329,7 @@ export const PageTodoTree = () => {
       add_mode: addMode,
       virtual: virtualMode,
       showLine: showLine,
+      playFontSize: playFontSize,
     }
     const tree = JSON.parse(JSON.stringify(storeVal))
     await callService<Services, 'Store'>('Store', {
@@ -358,6 +366,7 @@ export const PageTodoTree = () => {
     addMode,
     virtualMode,
     showLine,
+    playFontSize,
   ])
 
   const percent = useMemo(
@@ -386,6 +395,7 @@ export const PageTodoTree = () => {
       virtual: virtualMode,
       displayFile: displayFileRef.current,
       showLine,
+      playFontSize,
     },
     async onFinish(values) {
       const isChangeDisplay = values?.displayFile !== displayFileRef.current
@@ -399,6 +409,7 @@ export const PageTodoTree = () => {
       setMode(values?.add_mode)
       setVirtual(!!values?.virtual)
       setShowLine(!!values?.showLine)
+      setPlayFontSize(values?.playFontSize || DEFAULT_PLAYFONTSIZE)
       message.success(i18n.format('settingTip'))
       setVisible(false)
     },
@@ -530,6 +541,11 @@ export const PageTodoTree = () => {
                   }
                   updateTree()
                 }}
+                onPlay={() =>
+                  history.push(
+                    `/play?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`,
+                  )
+                }
               />
               <Button
                 type="text"

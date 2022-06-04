@@ -1,10 +1,13 @@
-import Button from 'antd/lib/button'
-import Divider from 'antd/lib/divider'
-import Form from 'antd/lib/form'
-import Modal from 'antd/lib/modal'
-import Select from 'antd/lib/select'
-import Space from 'antd/lib/space'
-import Typography from 'antd/lib/typography'
+import {
+  Input,
+  Button,
+  Divider,
+  Form,
+  Modal,
+  Select,
+  Space,
+  Typography,
+} from 'antd'
 import React, { useEffect, useState } from 'react'
 
 import { FormCheckbox } from '../'
@@ -33,6 +36,7 @@ type FormValues = {
   virtual?: boolean
   displayFile?: string
   showLine?: boolean
+  playFontSize?: number
 }
 
 export const SettingsModal: React.FC<SettingsProps> = ({
@@ -108,6 +112,18 @@ export const SettingsModal: React.FC<SettingsProps> = ({
         </Form.Item>
         <Form.Item label={i18n.format('showLine')} name="showLine">
           <FormCheckbox />
+        </Form.Item>
+        <Form.Item
+          label={i18n.format('play_size')}
+          name="playFontSize"
+          tooltip={i18n.format('play_size_tip')}
+        >
+          <Input
+            type="number"
+            style={{ width: '100px' }}
+            min={12}
+            addonAfter="px"
+          />
         </Form.Item>
       </Form>
       <Divider>{i18n.format('more_options')}</Divider>

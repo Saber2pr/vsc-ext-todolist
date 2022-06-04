@@ -26,6 +26,12 @@ Shotcuts:
 
 ---
 
+Play TodoList:
+
+![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/0604vsc-todolist-play.gif)
+
+---
+
 Support `Color Theme` with current setting:
 
 ![gif](https://cdn.jsdelivr.net/gh/saber2pr/MyWeb@master/resource/image/vsc-todo-v3-theme.gif)

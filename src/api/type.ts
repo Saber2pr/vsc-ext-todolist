@@ -7,6 +7,7 @@ export type IStoreTodoTree = {
   add_mode: 'top' | 'bottom'
   virtual?: boolean
   showLine?: boolean
+  playFontSize?: number
 }
 
 // service type define

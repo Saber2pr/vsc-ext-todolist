@@ -1,0 +1,29 @@
+.WordsInputing {
+  font-size: 14px;
+  line-height: 20px;
+  @keyframes Cursor {
+    0% {
+      opacity: 1;
+      display: block;
+    }
+    50% {
+      opacity: 0;
+      display: none;
+    }
+    100% {
+      opacity: 1;
+      display: block;
+    }
+  }
+
+  .cursor {
+    animation: Cursor 1.5s infinite steps(1, start);
+    display: inline-block;
+    letter-spacing: 0.88px;
+    vertical-align: sub;
+    width: 2px;
+    height: 1rem;
+    margin-left: 2px;
+    background: #d5d5d780;
+  }
+}

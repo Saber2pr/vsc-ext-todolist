@@ -10,24 +10,28 @@ import { Services } from '../../src/api/type'
 import { i18n } from './i18n'
 import { PageTodoTree } from './pages'
 import { APP_ARGS } from './utils'
+import { PagePlay } from './pages/play'
 
 setLogLevel('none')
 
 export const App = () => {
   const history = useHistory<{ file?: string }>()
   useEffect(() => {
-    callService<Services, 'GetLanguage'>('GetLanguage', null).then(language => {
-      i18n.setLocal(language)
-      history.push(
-        APP_ARGS?.file
-          ? `/todo_v2?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`
-          : `/todo_v2`
-      )
-    })
+    callService<Services, 'GetLanguage'>('GetLanguage', null).then(
+      (language) => {
+        i18n.setLocal(language)
+        history.push(
+          APP_ARGS?.file
+            ? `/todo_v2?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`
+            : `/todo_v2`,
+        )
+      },
+    )
   }, [history])
   return (
     <div className="app" data-theme={APP_ARGS.theme ?? 'light'}>
       <Route path="/todo_v2" component={() => <PageTodoTree />} />
+      <Route path="/play" component={() => <PagePlay />} />
     </div>
   )
 }

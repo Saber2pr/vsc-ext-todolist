@@ -57,6 +57,9 @@ export const localeMap = {
     display_file_reset: 'Reset',
     keybind: 'Shortcuts',
     showLine: 'Show Line',
+    play: 'Play',
+    play_size: 'Play FontSize',
+    play_size_tip: 'FontSize in View Play.',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -114,5 +117,8 @@ export const localeMap = {
     display_file_reset: '重置',
     keybind: '快捷键',
     showLine: '显示连接线',
+    play: '播放',
+    play_size: '演示字号',
+    play_size_tip: '在视图播放中字体的大小',
   },
 }

@@ -158,3 +158,15 @@ export const sortTree = (treeNode: TreeNode[]) => {
   }
   return nextTree
 }
+
+export const countTreeSize = (treeNode: TreeNode[]): number => {
+  let size = 0
+  if (!(treeNode?.length > 0)) return size
+  const stack = Array.isArray(treeNode) ? treeNode.slice() : []
+  while (stack.length) {
+    const node = stack.pop()
+    size++
+    stack.push(...node.children)
+  }
+  return size
+}

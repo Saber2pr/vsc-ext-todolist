@@ -1,7 +1,4 @@
-import Button from 'antd/lib/button'
-import Dropdown from 'antd/lib/dropdown'
-import Menu from 'antd/lib/menu'
-import message from 'antd/lib/message'
+import { Button, Dropdown, Menu, message } from 'antd'
 import React from 'react'
 
 import MoreOutlined from '@ant-design/icons/MoreOutlined'
@@ -19,6 +16,7 @@ export interface ViewOptionsProps {
   onCollapseAll: VoidFunction
   onPaste: (tree: TreeNode[]) => any
   onSort: VoidFunction
+  onPlay: VoidFunction
 }
 
 export const ViewOptions: React.FC<ViewOptionsProps> = ({
@@ -28,6 +26,7 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
   onPaste,
   onSort,
   tree,
+  onPlay,
 }) => {
   const menu = (
     <Menu>
@@ -53,7 +52,7 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
             'GetTemp',
             {
               key: KEY_TODO_TREE,
-            }
+            },
           )
           onPaste(cloneTree(getArray(tree)))
         }}
@@ -61,6 +60,7 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
         {i18n.format('paste')}
       </Menu.Item>
       <Menu.Item onClick={onSort}>{i18n.format('sort')}</Menu.Item>
+      <Menu.Item onClick={onPlay}>{i18n.format('play')}</Menu.Item>
     </Menu>
   )
 

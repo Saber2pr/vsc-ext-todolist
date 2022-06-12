@@ -18,3 +18,4 @@ web/
 !web/node_modules/antd/dist/antd.dark.min.css
 !web/build/app.min.js
 !web/build/app.min.css
+!web/build/theme-style.min.css

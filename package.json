@@ -66,7 +66,8 @@
 		"release": "standard-version",
 		"lint": "prettier --write ./src",
 		"prepare": "husky install",
-		"dev": "cd web && yarn dev"
+		"dev": "cd web && yarn dev",
+		"serve": "node web/server/server.js"
 	},
 	"devDependencies": {
 		"@types/node": "^12.11.7",

@@ -13,7 +13,6 @@ jobs:
         # secrets: DOCKER_USER, DOCKER_TOKEN
       - name: Build & Publish
         run: |
-          cd web
           image=${GITHUB_REPOSITORY#*/}:${GITHUB_REF#refs/*/}
           docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_TOKEN}}
           docker image build -t $image .

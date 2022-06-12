@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.32](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.31...v0.1.32) (2022-06-12)
+
+
+### Features
+
+* docker job ([a729a7d](https://github.com/Saber2pr/vsc-ext-todolist/commit/a729a7dddef8dfa02fa2c89e682a0f72f09d6c42))
+* mock service ([ebaebd0](https://github.com/Saber2pr/vsc-ext-todolist/commit/ebaebd01aa6c83e3b9a0b2ff213fb2b80dbad7f4))
+
 ### [0.1.31](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.30...v0.1.31) (2022-06-04)
 
 

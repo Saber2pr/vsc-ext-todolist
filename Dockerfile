@@ -10,5 +10,7 @@ RUN cd web && yarn install --network-timeout 600000 && yarn build
 
 RUN rm -rf ./node_modules
 
+EXPOSE 3000
+
 # script
 CMD [ "yarn", "serve" ]

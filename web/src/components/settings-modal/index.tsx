@@ -7,6 +7,7 @@ import {
   Select,
   Space,
   Typography,
+  Collapse,
 } from 'antd'
 import React, { useEffect, useState } from 'react'
 
@@ -28,6 +29,7 @@ export interface SettingsProps {
   onFinish: (values: FormValues) => Promise<void>
   onSaveAs: () => Promise<void>
   onParseMd: () => Promise<void>
+  onPlay: () => Promise<void>
   initValues?: FormValues
 }
 
@@ -37,6 +39,7 @@ type FormValues = {
   displayFile?: string
   showLine?: boolean
   playFontSize?: number
+  webhook?: string
 }
 
 export const SettingsModal: React.FC<SettingsProps> = ({
@@ -47,6 +50,7 @@ export const SettingsModal: React.FC<SettingsProps> = ({
   initValues,
   onSaveAs,
   onParseMd,
+  onPlay,
 }) => {
   const [form] = Form.useForm()
 
@@ -59,6 +63,7 @@ export const SettingsModal: React.FC<SettingsProps> = ({
       visible={visible}
       onCancel={onCancel}
       title={i18n.format('setting')}
+      style={{ userSelect: 'none' }}
       footer={
         <div className="flex space-between align-items-center">
           <Link
@@ -110,21 +115,28 @@ export const SettingsModal: React.FC<SettingsProps> = ({
         >
           <SetDisplayFile {...options} />
         </Form.Item>
-        <Form.Item label={i18n.format('showLine')} name="showLine">
-          <FormCheckbox />
-        </Form.Item>
-        <Form.Item
-          label={i18n.format('play_size')}
-          name="playFontSize"
-          tooltip={i18n.format('play_size_tip')}
-        >
-          <Input
-            type="number"
-            style={{ width: '100px' }}
-            min={12}
-            addonAfter="px"
-          />
-        </Form.Item>
+        <Collapse bordered>
+          <Collapse.Panel header={i18n.format('advanced')} key="advanced">
+            <Form.Item label={i18n.format('showLine')} name="showLine">
+              <FormCheckbox />
+            </Form.Item>
+            <Form.Item
+              label={i18n.format('play_size')}
+              name="playFontSize"
+              tooltip={i18n.format('play_size_tip')}
+            >
+              <Input
+                type="number"
+                style={{ width: '100px' }}
+                min={12}
+                addonAfter="px"
+              />
+            </Form.Item>
+            <Form.Item label={i18n.format('webhook')} name="webhook">
+              <Input type="url" />
+            </Form.Item>
+          </Collapse.Panel>
+        </Collapse>
       </Form>
       <Divider>{i18n.format('more_options')}</Divider>
       <Space split={<Divider type="vertical" />}>
@@ -148,6 +160,9 @@ export const SettingsModal: React.FC<SettingsProps> = ({
         >
           {i18n.format('keybind')}
         </Button>
+        <Button type="text" onClick={onPlay}>
+          {i18n.format('play')}
+        </Button>
       </Space>
     </Modal>
   )
@@ -157,6 +172,7 @@ export interface SettingsModalOps {
   onFinish: (values: FormValues) => Promise<void>
   onSaveAs: () => Promise<void>
   onParseMd: () => Promise<void>
+  onPlay: () => Promise<void>
   initValues: FormValues
   options: Options
 }
@@ -173,6 +189,7 @@ export const useSettingsModal = (ops: SettingsModalOps) => {
         initValues={ops.initValues}
         onSaveAs={ops.onSaveAs}
         onParseMd={ops.onParseMd}
+        onPlay={ops.onPlay}
       />
     ),
     setVisible,

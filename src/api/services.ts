@@ -1,4 +1,4 @@
-import { COM_MAIN, DATA_CONFIG } from './../constants'
+import { COM_MAIN, DATA_CONFIG, VIEW_TYPE } from './../constants'
 import { homedir } from 'os'
 import { join } from 'path'
 import * as vscode from 'vscode'
@@ -73,6 +73,14 @@ export const ServicesHandlers: HandleMap<Services, keyof Services> = {
     return path || DEFAULT_FILE_PATH
   },
   reload: async () => vscode.commands.executeCommand(COM_MAIN, 'true'),
+  OpenFile: async ({ path }) => {
+    const isTodoFile = /.(todo|todolistrc)$/.test(path)
+    await vscode.commands.executeCommand(
+      'vscode.openWith',
+      vscode.Uri.file(path),
+      isTodoFile ? VIEW_TYPE : 'default'
+    )
+  },
 }
 
 const handleServiceMessage = createServiceHandler<Services>(ServicesHandlers)

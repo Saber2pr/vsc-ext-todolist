@@ -16,7 +16,6 @@ export interface ViewOptionsProps {
   onCollapseAll: VoidFunction
   onPaste: (tree: TreeNode[]) => any
   onSort: VoidFunction
-  onPlay: VoidFunction
 }
 
 export const ViewOptions: React.FC<ViewOptionsProps> = ({
@@ -26,7 +25,6 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
   onPaste,
   onSort,
   tree,
-  onPlay,
 }) => {
   const menu = (
     <Menu>
@@ -60,7 +58,6 @@ export const ViewOptions: React.FC<ViewOptionsProps> = ({
         {i18n.format('paste')}
       </Menu.Item>
       <Menu.Item onClick={onSort}>{i18n.format('sort')}</Menu.Item>
-      <Menu.Item onClick={onPlay}>{i18n.format('play')}</Menu.Item>
     </Menu>
   )
 

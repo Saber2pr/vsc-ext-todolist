@@ -16,14 +16,22 @@ import {
   Spin,
   Typography,
 } from 'antd'
+import axios from 'axios'
 import nprogress from 'nprogress'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 
+import { DEFAULT_PLAYFONTSIZE } from '@/components/words-inputing'
+import { globalState } from '@/state'
+import { calcProgressV2 } from '@/utils/calc-progress'
 import CheckOutlined from '@ant-design/icons/CheckOutlined'
 import PlusOutlined from '@ant-design/icons/PlusOutlined'
 import UndoOutlined from '@ant-design/icons/UndoOutlined'
-import { callService } from '@saber2pr/vscode-webview'
+import {
+  callService,
+  isInVscode,
+  mockVscodeApi,
+} from '@saber2pr/vscode-webview'
 
 import { IStoreTodoTree, Key, Services } from '../../../../src/api/type'
 import { KEY_TODO_TREE } from '../../../../src/constants'
@@ -41,8 +49,8 @@ import { TodoTree } from '../../components/tree'
 import { ViewOptions } from '../../components/view-options'
 import { i18n } from '../../i18n'
 import {
-  appendNodes,
   APP_ARGS,
+  appendNodes,
   clearDoneNode,
   cloneTree,
   compileMd,
@@ -55,9 +63,6 @@ import {
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
-import { calcProgressV2 } from '@/utils/calc-progress'
-import { globalState } from '@/state'
-import { DEFAULT_PLAYFONTSIZE } from '@/components/words-inputing'
 
 const { Title } = Typography
 
@@ -94,7 +99,7 @@ export const PageTodoTree = () => {
 
   const location = useLocation()
   const params = location?.search ? parseUrlParam(location.search) : {}
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [loaded, setLoaded] = useState(false)
   // settings
@@ -102,6 +107,16 @@ export const PageTodoTree = () => {
   const [virtualMode, setVirtual] = useState<boolean>(false)
   const [showLine, setShowLine] = useState<boolean>(false)
   const [playFontSize, setPlayFontSize] = useState<number>(0)
+  const [webhook, setWebhook] = useState<string>()
+
+  // for hook message
+  useEffect(() => {
+    if (webhook) {
+      mockVscodeApi.hook = (message) => axios.post(webhook, message)
+    } else {
+      mockVscodeApi.hook = null
+    }
+  }, [webhook])
 
   // init
   const loadSource = async (
@@ -128,6 +143,7 @@ export const PageTodoTree = () => {
       setVirtual(!!val.virtual)
       setShowLine(!!val.showLine)
       setPlayFontSize(val.playFontSize || DEFAULT_PLAYFONTSIZE)
+      setWebhook(val.webhook)
       forceUpdate()
     }
     setLoaded(true)
@@ -275,10 +291,13 @@ export const PageTodoTree = () => {
     }
 
     return (
-      <Dropdown trigger={['contextMenu']} overlay={itemMenu}>
+      <Dropdown
+        trigger={['contextMenu']}
+        overlay={isInVscode ? itemMenu : <></>}
+      >
         <Space className="todo">
           <TodoItem todo={todo} onChange={() => updateTree()} />
-          {ops}
+          {isInVscode && ops}
         </Space>
       </Dropdown>
     )
@@ -291,7 +310,7 @@ export const PageTodoTree = () => {
       key,
       children: [],
       todo: {
-        content: 'edit todo.',
+        content: i18n.format('item_placeholder'),
         id: key,
         level: 'default',
         done: false,
@@ -330,6 +349,7 @@ export const PageTodoTree = () => {
       virtual: virtualMode,
       showLine: showLine,
       playFontSize: playFontSize,
+      webhook: webhook,
     }
     const tree = JSON.parse(JSON.stringify(storeVal))
     await callService<Services, 'Store'>('Store', {
@@ -367,6 +387,7 @@ export const PageTodoTree = () => {
     virtualMode,
     showLine,
     playFontSize,
+    webhook,
   ])
 
   const percent = useMemo(
@@ -396,6 +417,7 @@ export const PageTodoTree = () => {
       displayFile: displayFileRef.current,
       showLine,
       playFontSize,
+      webhook,
     },
     async onFinish(values) {
       const isChangeDisplay = values?.displayFile !== displayFileRef.current
@@ -410,6 +432,7 @@ export const PageTodoTree = () => {
       setVirtual(!!values?.virtual)
       setShowLine(!!values?.showLine)
       setPlayFontSize(values?.playFontSize || DEFAULT_PLAYFONTSIZE)
+      setWebhook(values?.webhook)
       message.success(i18n.format('settingTip'))
       setVisible(false)
     },
@@ -423,6 +446,9 @@ export const PageTodoTree = () => {
     },
     async onParseMd() {
       setShowMdOptionsModal(true)
+    },
+    async onPlay() {
+      navigate(`/play?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`)
     },
   })
 
@@ -477,87 +503,84 @@ export const PageTodoTree = () => {
             )}
           </Spin>
         </div>
-        <Affix offsetBottom={0}>
-          <div className="tools-wrapper" ref={toolsWrapperRef}>
-            <Divider className="tools-wrapper-div" style={{ margin: 0 }} />
-            <Space split={<Divider type="vertical" />}>
-              <Button
-                type="text"
-                onClick={() => {
-                  createNode(() => treeRef.current)
-                  updateTree()
-                }}
-              >
-                {i18n.format('newItem')}
-              </Button>
-              <Button
-                type="text"
-                onClick={async () => {
-                  await save()
-                  message.success(i18n.format('saveTip'))
-                }}
-              >
-                {i18n.format('save')}
-              </Button>
-              <Popconfirm
-                placement="top"
-                title={i18n.format('clearDoneTip')}
-                onConfirm={() => {
-                  treeRef.current = clearDoneNode(
-                    treeRef.current,
-                    (node) => node.todo.done,
-                  )
-                  updateTree()
-                }}
-                okText={i18n.format('confirm')}
-                cancelText={i18n.format('cancel')}
-              >
-                <Button type="text">{i18n.format('clearDone')}</Button>
-              </Popconfirm>
-              <ViewOptions
-                tree={getArray(treeRef.current)}
-                onUpdate={async () => {
-                  await loadSource()
-                  message.success(i18n.format('updateTip'))
-                }}
-                onSort={async () => {
-                  await loadSource(sortTree)
-                  message.success(i18n.format('sort_tip'))
-                }}
-                onCollapseAll={() => {
-                  updateExpandKeys([], 'replace')
-                }}
-                onExpandAll={() => {
-                  const keys = getTreeKeys(...treeRef.current)
-                  updateExpandKeys(keys, 'replace')
-                }}
-                onPaste={(copyTree) => {
-                  const current = getArray(treeRef.current)
-                  const newNodes = getArray(copyTree)
-                  if (addMode === 'top') {
-                    treeRef.current = newNodes.concat(current)
-                  } else {
-                    treeRef.current = current.concat(newNodes)
-                  }
-                  updateTree()
-                }}
-                onPlay={() =>
-                  history.push(
-                    `/play?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`,
-                  )
-                }
-              />
-              <Button
-                type="text"
-                onClick={() => {
-                  setVisible(true)
-                }}
-              >
-                {i18n.format('setting')}
-              </Button>
-            </Space>
-          </div>
-        </Affix>
+        {isInVscode && (
+          <Affix offsetBottom={0}>
+            <div className="tools-wrapper" ref={toolsWrapperRef}>
+              <Divider className="tools-wrapper-div" style={{ margin: 0 }} />
+              <Space split={<Divider type="vertical" />}>
+                <Button
+                  type="text"
+                  onClick={() => {
+                    createNode(() => treeRef.current)
+                    updateTree()
+                  }}
+                >
+                  {i18n.format('newItem')}
+                </Button>
+                <Button
+                  type="text"
+                  onClick={async () => {
+                    await save()
+                    message.success(i18n.format('saveTip'))
+                  }}
+                >
+                  {i18n.format('save')}
+                </Button>
+                <Popconfirm
+                  placement="top"
+                  title={i18n.format('clearDoneTip')}
+                  onConfirm={() => {
+                    treeRef.current = clearDoneNode(
+                      treeRef.current,
+                      (node) => node.todo.done,
+                    )
+                    updateTree()
+                  }}
+                  okText={i18n.format('confirm')}
+                  cancelText={i18n.format('cancel')}
+                >
+                  <Button type="text">{i18n.format('clearDone')}</Button>
+                </Popconfirm>
+                <ViewOptions
+                  tree={getArray(treeRef.current)}
+                  onUpdate={async () => {
+                    await loadSource()
+                    message.success(i18n.format('updateTip'))
+                  }}
+                  onSort={async () => {
+                    await loadSource(sortTree)
+                    message.success(i18n.format('sort_tip'))
+                  }}
+                  onCollapseAll={() => {
+                    updateExpandKeys([], 'replace')
+                  }}
+                  onExpandAll={() => {
+                    const keys = getTreeKeys(...treeRef.current)
+                    updateExpandKeys(keys, 'replace')
+                  }}
+                  onPaste={(copyTree) => {
+                    const current = getArray(treeRef.current)
+                    const newNodes = getArray(copyTree)
+                    if (addMode === 'top') {
+                      treeRef.current = newNodes.concat(current)
+                    } else {
+                      treeRef.current = current.concat(newNodes)
+                    }
+                    updateTree()
+                  }}
+                />
+                <Button
+                  type="text"
+                  onClick={() => {
+                    setVisible(true)
+                  }}
+                >
+                  {i18n.format('setting')}
+                </Button>
+              </Space>
+            </div>
+          </Affix>
+        )}
         <MdOptionModal
           visible={showMdOptionsModal}
           onCancel={() => setShowMdOptionsModal(false)}

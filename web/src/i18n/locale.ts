@@ -59,7 +59,10 @@ export const localeMap = {
     showLine: 'Show Line',
     play: 'Play',
     play_size: 'Play FontSize',
-    play_size_tip: 'FontSize in View Play.',
+    play_size_tip: 'FontSize in Play.',
+    advanced: 'Advanced',
+    item_placeholder: 'edit todo.',
+    webhook: 'Webhook',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -119,6 +122,9 @@ export const localeMap = {
     showLine: '显示连接线',
     play: '播放',
     play_size: '演示字号',
-    play_size_tip: '在视图播放中字体的大小',
+    play_size_tip: '在播放中字体的大小',
+    advanced: '高级选项',
+    item_placeholder: '编辑待办',
+    webhook: 'Webhook',
   },
 }

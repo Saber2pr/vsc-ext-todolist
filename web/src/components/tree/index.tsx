@@ -6,6 +6,7 @@ import { Key } from '../../../../src/api/type'
 import { findNode, getArray, treeDrop, TreeNode } from '../../utils'
 import keycode from 'keycode'
 import { globalState } from '@/state'
+import { isInVscode } from '@saber2pr/vscode-webview'
 
 export interface TodoTreeProps {
   showLine?: boolean
@@ -33,6 +34,7 @@ export const TodoTree: React.FC<TodoTreeProps> = ({
   const [selectedKeys, setSelectedKeys] = useState([])
 
   useEffect(() => {
+    if (!isInVscode) return
     if (!onKeydown) return
     const onKeydownHandle = (event: KeyboardEvent) => {
       const key = getArray(selectedKeys)[0]

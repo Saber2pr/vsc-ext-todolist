@@ -4,7 +4,7 @@ import * as vscode from 'vscode'
 import { calcProgressV2 } from './api/calc-progress'
 import { handleServiceMessage, ServicesHandlers } from './api/services'
 import { IStoreTodoTree } from './api/type'
-import { COM_MAIN, KEY_TODO_TREE } from './constants'
+import { COM_MAIN, KEY_TODO_TREE, VIEW_TYPE } from './constants'
 import { RCManager } from './store/rc'
 import { TodoEditor } from './TodoEditor'
 import { isActiveThemeKind } from './utils/isActiveThemeKind'
@@ -116,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
       )
     }),
     vscode.window.registerCustomEditorProvider(
-      'todolist.edit',
+      VIEW_TYPE,
       new TodoEditor(context)
     ),
     vscode.window.onDidChangeActiveColorTheme(event => {

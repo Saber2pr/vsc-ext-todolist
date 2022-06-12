@@ -8,6 +8,7 @@ export type IStoreTodoTree = {
   virtual?: boolean
   showLine?: boolean
   playFontSize?: number
+  webhook?: string
 }
 
 // service type define
@@ -36,6 +37,8 @@ export type Services = {
   // display
   SetDisplayFile: Pair<string, any>
   GetDisplayFile: Pair<any, string>
+  // vscode
+  OpenFile: Pair<{ path: string }>
 }
 
 export type ITodoItem = {

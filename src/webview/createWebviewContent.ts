@@ -31,6 +31,7 @@ export const createWebviewContent = ({
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="${getSource('build', `app.min.css`)}" rel="stylesheet">
+    <link href="${getSource('build', `theme-style.min.css`)}" rel="stylesheet">
     <link href="${getSource(
       'node_modules',
       `antd`,

@@ -7,7 +7,7 @@ import { countTreeSize, getArray, parseUrlParam, TreeNode } from '@/utils'
 import { callService } from '@saber2pr/vscode-webview'
 import { Spin } from 'antd'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import type {
   IStoreTodoTree,
   ITodoTree,
@@ -22,7 +22,7 @@ export interface PagePlayProps {}
 
 export const PagePlay: React.FC<PagePlayProps> = ({}) => {
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const params = location?.search ? parseUrlParam(location.search) : {}
 
   const { data, loading } = useAsync(async () => {
@@ -56,7 +56,7 @@ export const PagePlay: React.FC<PagePlayProps> = ({}) => {
       stackRef.current = stack
     } else {
       nprogress.done()
-      history.goBack()
+      navigate(-1)
     }
   }
 

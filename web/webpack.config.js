@@ -14,6 +14,8 @@ const publicPath = (resourcePath, context) =>
 module.exports = {
   entry: {
     app: './src/index.tsx',
+    'antd-style': './node_modules/antd/dist/antd.css',
+    'theme-style': './src/styles/theme.less',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -61,6 +63,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'template.html'),
+      chunks: ['app', 'antd-style'],
     }),
     new MiniCssExtractPlugin({
       filename: '[name].min.css',

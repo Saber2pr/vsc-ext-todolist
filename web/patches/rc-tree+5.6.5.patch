@@ -1,0 +1,24 @@
+diff --git a/node_modules/rc-tree/es/TreeNode.js b/node_modules/rc-tree/es/TreeNode.js
+index fbd44c0..6562a33 100644
+--- a/node_modules/rc-tree/es/TreeNode.js
++++ b/node_modules/rc-tree/es/TreeNode.js
+@@ -361,7 +361,6 @@ var InternalTreeNode = /*#__PURE__*/function (_React$Component) {
+       }, titleNode);
+       return /*#__PURE__*/React.createElement("span", {
+         ref: _this.setSelectHandle,
+-        title: typeof title === 'string' ? title : '',
+         className: classNames("".concat(wrapClass), "".concat(wrapClass, "-").concat(_this.getNodeState() || 'normal'), !disabled && (selected || dragNodeHighlight) && "".concat(prefixCls, "-node-selected")),
+         onMouseEnter: _this.onMouseEnter,
+         onMouseLeave: _this.onMouseLeave,
+diff --git a/node_modules/rc-tree/lib/TreeNode.js b/node_modules/rc-tree/lib/TreeNode.js
+index 8a2e054..84ce880 100644
+--- a/node_modules/rc-tree/lib/TreeNode.js
++++ b/node_modules/rc-tree/lib/TreeNode.js
+@@ -391,7 +391,6 @@ var InternalTreeNode = /*#__PURE__*/function (_React$Component) {
+       }, titleNode);
+       return /*#__PURE__*/React.createElement("span", {
+         ref: _this.setSelectHandle,
+-        title: typeof title === 'string' ? title : '',
+         className: (0, _classnames.default)("".concat(wrapClass), "".concat(wrapClass, "-").concat(_this.getNodeState() || 'normal'), !disabled && (selected || dragNodeHighlight) && "".concat(prefixCls, "-node-selected")),
+         onMouseEnter: _this.onMouseEnter,
+         onMouseLeave: _this.onMouseLeave,

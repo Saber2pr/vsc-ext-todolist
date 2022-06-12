@@ -1,7 +1,7 @@
 import './app.less'
 
 import React, { useEffect } from 'react'
-import { Route, useHistory } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router'
 import { setLogLevel } from 'webpack-dev-server/client/utils/log'
 
 import { callService } from '@saber2pr/vscode-webview'
@@ -15,12 +15,13 @@ import { PagePlay } from './pages/play'
 setLogLevel('none')
 
 export const App = () => {
-  const history = useHistory<{ file?: string }>()
+  const navigate = useNavigate()
   useEffect(() => {
     callService<Services, 'GetLanguage'>('GetLanguage', null).then(
       (language) => {
+        console.log('language', language)
         i18n.setLocal(language)
-        history.push(
+        navigate(
           APP_ARGS?.file
             ? `/todo_v2?file=${APP_ARGS.file}&name=${APP_ARGS?.name}`
             : `/todo_v2`,
@@ -30,8 +31,10 @@ export const App = () => {
   }, [history])
   return (
     <div className="app" data-theme={APP_ARGS.theme ?? 'light'}>
-      <Route path="/todo_v2" component={() => <PageTodoTree />} />
-      <Route path="/play" component={() => <PagePlay />} />
+      <Routes>
+        <Route path="/todo_v2" element={<PageTodoTree />} />
+        <Route path="/play" element={<PagePlay />} />
+      </Routes>
     </div>
   )
 }

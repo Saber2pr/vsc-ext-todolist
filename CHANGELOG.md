@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.37](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.36...v0.1.37) (2022-06-13)
+
+
+### Bug Fixes
+
+* preview disable drag ([25b2e7d](https://github.com/Saber2pr/vsc-ext-todolist/commit/25b2e7d6400c3482ef29402e6894d1973be32876))
+
 ### [0.1.36](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.35...v0.1.36) (2022-06-12)
 
 ### [0.1.35](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.34...v0.1.35) (2022-06-12)

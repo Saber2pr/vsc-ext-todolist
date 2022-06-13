@@ -1,3 +1,4 @@
+import { globalState } from '@/state'
 import {
   Input,
   Button,
@@ -179,6 +180,7 @@ export interface SettingsModalOps {
 
 export const useSettingsModal = (ops: SettingsModalOps) => {
   const [visible, setVisible] = useState(false)
+  globalState.blockKeyboard = visible
   return {
     modal: (
       <SettingsModal

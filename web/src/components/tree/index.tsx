@@ -57,7 +57,7 @@ export const TodoTree: React.FC<TodoTreeProps> = ({
       titleRender={titleRender}
       expandedKeys={expandedKeys}
       onExpand={onExpand}
-      draggable={{ icon: false }}
+      draggable={isInVscode ? { icon: false } : false}
       blockNode
       showLine={showLine}
       onDrop={treeDrop(treeData, handleDrop)}

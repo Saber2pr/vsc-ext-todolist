@@ -25,7 +25,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
       const isUrlLink = /^http/.test(todo.link)
       if (isUrlLink) {
         content = (
-          <a href={todo.link}>
+          <a href={todo.link} onClick={() => {
+            if(!isInVscode) {
+              window.open(todo.link, '_blank')
+            }
+          }}>
             {todo.content}
             {LinkIcon}
           </a>

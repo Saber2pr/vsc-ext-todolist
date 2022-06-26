@@ -544,6 +544,7 @@ export const PageTodoTree = () => {
                 <ViewOptions
                   tree={getArray(treeRef.current)}
                   onUpdate={async () => {
+                    isMounted.current = false
                     await loadSource()
                     message.success(i18n.format('updateTip'))
                   }}

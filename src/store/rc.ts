@@ -58,9 +58,6 @@ export const SafeJSON: Pick<typeof JSON, 'parse' | 'stringify'> = {
   },
 }
 
-/**
- * 保证文件读写前，文件是存在的
- */
 const prepare: MethodDecorator = (
   target,
   key,
@@ -90,16 +87,6 @@ const prepare: MethodDecorator = (
   }
 }
 
-/**
- * 安全的json读写类
- * ```ts
- * // usage
- * const file = new RCManager('./config.json')
- * file.set('token', 'xxx')
- * file.get('token')
- * file.delete('token')
- * ```
- */
 export class RCManager {
   constructor(private path: string) {}
 

@@ -48,6 +48,7 @@ export type ITodoItem = {
   level: 'secondary' | 'default' | 'success' | 'warning' | 'danger'
   link?: string
   pendingDelete?: boolean
+  tip?: string
 }
 
 export type ITodoTree = {

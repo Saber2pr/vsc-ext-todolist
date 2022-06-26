@@ -1,8 +1,9 @@
 import { globalState } from '@/state'
-import { LinkOutlined } from '@ant-design/icons'
+import { LinkOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { callService, isInVscode } from '@saber2pr/vscode-webview'
+import { Tooltip } from 'antd'
 import Typography from 'antd/lib/typography'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import type { ITodoItem, Services } from '../../../../src/api/type'
 const { Text } = Typography
@@ -13,11 +14,25 @@ export interface TodoItemProps {
 }
 
 const LinkIcon = <LinkOutlined style={{ marginLeft: 4 }} />
+const TipIcon = <QuestionCircleOutlined style={{ marginLeft: 4 }} />
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
   const [editing, setEditing] = useState(false)
 
-  let content: string | JSX.Element = todo.content
+  const Tip = useMemo(() => {
+    const tip = todo?.tip
+    if (tip) {
+      return <Tooltip title={tip}>{TipIcon}</Tooltip>
+    }
+    return <></>
+  }, [todo?.tip])
+
+  let content: string | JSX.Element = (
+    <>
+      {todo.content}
+      {Tip}
+    </>
+  )
   if (editing) {
     content = todo.content
   } else {
@@ -25,13 +40,17 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
       const isUrlLink = /^http/.test(todo.link)
       if (isUrlLink) {
         content = (
-          <a href={todo.link} onClick={() => {
-            if(!isInVscode) {
-              window.open(todo.link, '_blank')
-            }
-          }}>
+          <a
+            href={todo.link}
+            onClick={() => {
+              if (!isInVscode) {
+                window.open(todo.link, '_blank')
+              }
+            }}
+          >
             {todo.content}
             {LinkIcon}
+            {Tip}
           </a>
         )
       } else {
@@ -45,6 +64,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onChange }) => {
           >
             {todo.content}
             {LinkIcon}
+            {Tip}
           </a>
         )
       }

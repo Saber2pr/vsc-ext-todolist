@@ -63,6 +63,7 @@ import {
   TreeNode,
 } from '../../utils'
 import { parseUrlParam } from '../../utils/parseUrlParam'
+import useInterval from 'react-use/lib/useInterval'
 
 const { Title } = Typography
 
@@ -225,6 +226,10 @@ export const PageTodoTree = () => {
         todo.link = link
         updateTree()
       },
+      onAddComment: (tip) => {
+        todo.tip = tip
+        updateTree()
+      },
       onCollapseAll: (node) => {
         const keys = getTreeKeys(node)
         const keysMap = keys.reduce((acc, k) => ({ ...acc, [k]: k }), {})
@@ -338,8 +343,16 @@ export const PageTodoTree = () => {
     }
   }
 
+  const autoRefreshInterval = isInVscode ? null : 3000
+  useInterval(() => {
+    if (!isInVscode) {
+      isMounted.current = false
+      loadSource()
+    }
+  }, autoRefreshInterval)
+
   const save = async () => {
-    nprogress.start()
+    isInVscode && nprogress.start()
     const storeVal: IStoreTodoTree = {
       tree: treeRef.current,
       expandKeys: expandKeysRef.current,
@@ -357,7 +370,7 @@ export const PageTodoTree = () => {
       value: tree,
       path: params?.file,
     })
-    nprogress.done()
+    isInVscode && nprogress.done()
     return {
       [KEY_TODO_TREE]: tree,
     }
@@ -461,7 +474,10 @@ export const PageTodoTree = () => {
         </Space>
         <Divider />
         <div className="tree-wrapper">
-          <Spin spinning={!loaded} tip={i18n.format('loading')}>
+          <Spin
+            spinning={isInVscode ? !loaded : false}
+            tip={i18n.format('loading')}
+          >
             {todoTreeLength > 0 ? (
               <TodoTree
                 showLine={showLine}

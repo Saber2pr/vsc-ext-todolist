@@ -63,6 +63,8 @@ export const localeMap = {
     advanced: 'Advanced',
     item_placeholder: 'edit todo.',
     webhook: 'Webhook',
+    add_tip: 'Add Comment',
+    add_tip_placeholder: 'Add Comment ...',
   },
   'zh-cn': {
     removeItemTip: '确定删除此待办事项？',
@@ -126,5 +128,7 @@ export const localeMap = {
     advanced: '高级选项',
     item_placeholder: '编辑待办',
     webhook: 'Webhook',
+    add_tip: '添加注释',
+    add_tip_placeholder: '添加注释...',
   },
 }

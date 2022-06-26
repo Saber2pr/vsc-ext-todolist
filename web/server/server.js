@@ -3,7 +3,7 @@ const fs = require('fs-extra')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
-const { RCManager } = require('./rc')
+const { RCManager } = require('../../out/store/rc')
 
 const app = express()
 

@@ -27,6 +27,7 @@ export interface OptionsBtnProps {
   node: TreeNode
   onPaste: (node: TreeNode) => void
   onAddLink: (link: string) => void
+  onAddComment: (comment: string) => void
   onExpandAll: (node: TreeNode) => void
   onDelete: (node: TreeNode) => void
   onCollapseAll: (node: TreeNode) => void
@@ -48,19 +49,36 @@ export const useCreateItemMenu = ({
   onCollapseAll,
   onExpandAll,
   onDelete,
+  onAddComment,
 }: OptionsBtnProps) => {
-  const { modal, setVisible } = usePromptModal({
-    onOk: (value) => {
-      onAddLink(value)
-      globalState.blockKeyboard = false
+  const { modal: AddLinkModal, setVisible: setAddLinkVisible } = usePromptModal(
+    {
+      onOk: (value) => {
+        onAddLink(value)
+        globalState.blockKeyboard = false
+      },
+      placeholder: i18n.format('add_link_holder'),
+      title: i18n.format('add_link'),
+      value: node?.todo?.link,
+      onCancel: () => {
+        globalState.blockKeyboard = false
+      },
     },
-    placeholder: i18n.format('add_link_holder'),
-    title: i18n.format('add_link'),
-    value: node?.todo?.link,
-    onCancel: () => {
-      globalState.blockKeyboard = false
-    },
-  })
+  )
+
+  const { modal: AddCommentModal, setVisible: setAddCommentVisible } =
+    usePromptModal({
+      onOk: (value) => {
+        onAddComment(value)
+        globalState.blockKeyboard = false
+      },
+      placeholder: i18n.format('add_tip_placeholder'),
+      title: i18n.format('add_tip'),
+      value: node?.todo?.tip,
+      onCancel: () => {
+        globalState.blockKeyboard = false
+      },
+    })
 
   return (
     <Menu>
@@ -82,12 +100,21 @@ export const useCreateItemMenu = ({
       <Menu.Item
         onClick={() => {
           globalState.blockKeyboard = true
-          setVisible(true)
+          setAddLinkVisible(true)
         }}
       >
         {i18n.format('add_link')}
       </Menu.Item>
-      {modal}
+      {/* <Menu.Item
+        onClick={() => {
+          globalState.blockKeyboard = true
+          setAddCommentVisible(true)
+        }}
+      >
+        {i18n.format('add_tip')}
+      </Menu.Item> */}
+      {AddLinkModal}
+      {/* {AddCommentModal} */}
     </Menu>
   )
 }

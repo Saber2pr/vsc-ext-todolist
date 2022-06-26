@@ -12,6 +12,7 @@ export interface PromptModalProps {
   onOk: (value: string) => void
   onCancel?: VoidFunction
   visible?: boolean
+  type?: 'input' | 'textarea'
 }
 
 export const PromptModal: React.FC<PromptModalProps> = ({
@@ -21,6 +22,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
   visible,
   onCancel,
   onOk,
+  type = 'input',
 }) => {
   const [form] = Form.useForm()
   return (
@@ -35,7 +37,17 @@ export const PromptModal: React.FC<PromptModalProps> = ({
     >
       <Form form={form} onFinish={(values) => onOk(values?.value)}>
         <Form.Item name="value" initialValue={value}>
-          <Input placeholder={placeholder} allowClear />
+          {type === 'input' ? (
+            <Input placeholder={placeholder} allowClear />
+          ) : (
+            <Input.TextArea
+              autoSize={{
+                minRows: 2,
+              }}
+              placeholder={placeholder}
+              allowClear
+            />
+          )}
         </Form.Item>
       </Form>
     </Modal>
@@ -48,6 +60,7 @@ export interface UsePromptModalOps {
   placeholder?: string
   onOk: (value: string) => void
   onCancel: VoidFunction
+  type?: PromptModalProps['type']
 }
 
 export const usePromptModal = (ops: UsePromptModalOps) => {
@@ -64,6 +77,7 @@ export const usePromptModal = (ops: UsePromptModalOps) => {
         title={ops.title}
         value={ops.value}
         placeholder={ops.placeholder}
+        type={ops.type}
       />
     ),
     setVisible,

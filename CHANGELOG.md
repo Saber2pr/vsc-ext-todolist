@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.38](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.37...v0.1.38) (2022-06-26)
+
+
+### Features
+
+* docker web auto autorefresh ([d0b0b8c](https://github.com/Saber2pr/vsc-ext-todolist/commit/d0b0b8c46a995f5c8138e51fd4860f78c1ea9541))
+
+
+### Bug Fixes
+
+* update not save ([58a453d](https://github.com/Saber2pr/vsc-ext-todolist/commit/58a453da802e62563e88bbe3401f6d1728ceca62))
+
 ### [0.1.37](https://github.com/Saber2pr/vsc-ext-todolist/compare/v0.1.36...v0.1.37) (2022-06-13)
 
 

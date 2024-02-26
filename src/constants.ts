@@ -1,0 +1,8 @@
+export const DATA_CONFIG = '.todolistrc_config'
+export const FILE_DEFAULT = '.todolistrc'
+export const FILE_TEMP = '.todolistrc_temp'
+export const COM_MAIN = 'todolist.main'
+export const KEY_TODO = 'todolist'
+export const KEY_TODO_TREE = 'todotree'
+export const VIEW_TYPE = 'todolist.edit'
+export const KEY_SCRIPTS_LIST = 'scripts'

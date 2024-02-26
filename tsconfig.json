@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "outDir": "out",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["es6"],
+    "strict": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", ".vscode-test", "web"]
+}

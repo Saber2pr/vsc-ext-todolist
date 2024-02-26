@@ -1,4 +1,4 @@
-name: R
+name: Checkout Release
 on:
   workflow_dispatch:
 jobs:

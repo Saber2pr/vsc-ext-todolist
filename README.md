@@ -52,5 +52,5 @@ Extra todo-file support:
 
 ## More
 
-1. Feedback and opensource on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
+1. Feedback on github [vsc-ext-todolist](https://github.com/Saber2pr/vsc-ext-todolist)
 2. Web app support: [TodoList on Web](https://fronted-tsx-developer.github.io/demos/todotree/index.html)

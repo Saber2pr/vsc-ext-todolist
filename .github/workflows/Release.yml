@@ -8,7 +8,7 @@ jobs:
       - name: Run action
         uses: andrewthetechie/gha-clone-releases@v1.7.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.USER_TOKEN }}
           src_repo: Saber2pr/todolist-app
           dst_repo: Saber2pr/vsc-ext-todolist
           copy_assets: true

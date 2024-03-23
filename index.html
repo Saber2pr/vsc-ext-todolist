@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Todo List</title><style>body {
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .app-drag {
+      -webkit-app-region: drag;
+    }
+
+    #app-background {
+      background-size: cover;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #root {
+      position: relative;
+      z-index: 2;
+    }
+
+    .ant-tree,
+    .ant-picker-calendar,
+    .ant-picker-calendar-full .ant-picker-panel {
+      background: transparent !important;
+    }</style><script defer="defer" src="./app.min.js"></script><script defer="defer" src="./antd-dark-style.min.js"></script><link href="./app.min.css" rel="stylesheet"><link href="./antd-dark-style.min.css" rel="stylesheet"></head><body><div id="app-background"></div><div id="root"></div></body></html>

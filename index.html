@@ -44,7 +44,16 @@
     .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title,
     .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-paragraph>li {
       background-color: #0e0e0e !important;
-    }</style><style>.book,
+    }</style><style>.book_wrap {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    .book,
     .book__pg-shadow,
     .book__pg {
       animation: cover 6s ease-in-out infinite;
@@ -403,4 +412,4 @@
         background-color: var(--white);
         transform: translate3d(0, 0, 1px) rotateY(0);
       }
-    }</style><script defer="defer" src="app-v0.2.196.min.js"></script><script defer="defer" src="antd-dark-style-v0.2.196.min.js"></script><link href="app-v0.2.196.min.css" rel="stylesheet"><link href="antd-dark-style-v0.2.196.min.css" rel="stylesheet"></head><body><div id="app-background"></div><div id="root"><div classname="book"><div classname="book__pg-shadow"></div><div classname="book__pg"></div><div classname="book__pg book__pg--2"></div><div classname="book__pg book__pg--3"></div><div classname="book__pg book__pg--4"></div><div classname="book__pg book__pg--5"></div></div></div></body></html>
+    }</style><script defer="defer" src="app-v0.2.196.min.js"></script><script defer="defer" src="antd-dark-style-v0.2.196.min.js"></script><link href="app-v0.2.196.min.css" rel="stylesheet"><link href="antd-dark-style-v0.2.196.min.css" rel="stylesheet"></head><body><div id="app-background"></div><div id="root"><div class="book_wrap"><div class="book"><div class="book__pg-shadow"></div><div class="book__pg"></div><div class="book__pg book__pg--2"></div><div class="book__pg book__pg--3"></div><div class="book__pg book__pg--4"></div><div class="book__pg book__pg--5"></div></div></div></div></body></html>

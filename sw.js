@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-globals */
 /**
- * Todo List PWA service worker. 0.2.207 is replaced at build time.
+ * Todo List PWA service worker. 0.2.208 is replaced at build time.
  */
-const CACHE_NAME = 'todolist-0.2.207'
+const CACHE_NAME = 'todolist-0.2.208'
 
 const PRECACHE_URLS = [
   '/',
